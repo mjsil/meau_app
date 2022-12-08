@@ -1,5 +1,5 @@
 <h3 align="center">
-   APP - BeTheHero
+   APP - Meau
 </h3>
 
 <p align="center">
@@ -10,7 +10,7 @@
   <a href="#-licença">Licença</a>
 </p>
 
-<img alt="Layout" src="https://user-images.githubusercontent.com/42494117/156928340-4a0155c3-d080-4cca-9c16-4b2acaeed42c.png">
+<img alt="Layout" src="https://user-images.githubusercontent.com/42494117/206493844-fe66b728-a12c-4e7f-939e-89dba40e961f.png">
 
 ## 👨🏻‍💻 Projeto
 
