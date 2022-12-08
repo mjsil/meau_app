@@ -58,7 +58,7 @@ $ flutter run
 ```bash
 # Fork via GitHub official command line
 # Caso não tenha o GitHub CLI, realize o fork pelo site.
-$ gh repo fork mjsil/app_be_the_hero
+$ gh repo fork mjsil/meau_app
 ```
 
 ```bash
