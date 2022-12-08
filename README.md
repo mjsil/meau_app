@@ -14,43 +14,41 @@
 
 ## 👨🏻‍💻 Projeto
 
-App para aproximar ONGs de animais em situação de rua da população.
+App para adoção e doação de animais domésticos.
 
-O aplicativo BeTheHero tem como principal funcinalidade aproximar ONGs de animais em situação de rua da população, as mesmas podem utilizar o sistema WEB para cadastrar novos casos enquanto no APP a população pode manifestar o interesse em ajudar a ONG a custear tratamentos e/ou medicamentos a animais recolhidos, escolhendo E-mail ou Whatsapp como meio de comunicação.
+O aplicativo tem como principal funcionalidade a adoção e doação de animais domésticos (especificamente cães e gatos) e visa facilitar o intermédio dos protetores com possíveis adotantes, padrinhos e ajudantes.
 
 ## 🚀 Tecnologias
 
 Esta aplicação foi desenolvida com as seguintes tecnologias:
 
-- [Expo](https://docs.expo.dev/)
-- [React Navigation](https://reactnavigation.org/)
-- [Vector Icons](https://icons.expo.fyi/)
-- [MaskedView](https://www.npmjs.com/package/@react-native-community/masked-view)
-- [Axios](https://github.com/axios/axios)
-- [Gesture Handler](https://docs.swmansion.com/react-native-gesture-handler/docs/)
-- [Intl](https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/Intl)
+- [Flutter](https://flutter.dev/)
+- [Firebase](https://firebase.google.com/)
 
 ## 💻 Instalação, execução e desenvolvimento
 
 ### Pré-requisitos
 
-- [Expo](https://docs.expo.dev/)
+- [Flutter](https://flutter.dev/)
+- [Firebase Core](https://firebase.google.com/)
+- [Firebase Auth](https://firebase.google.com/)
+- [Cloud Firestore](https://firebase.google.com/)
 
 **Faça um clone desse repositório e acesse o diretório**
 
 ```bash
-git clone https://github.com/mjsil/app_be_the_hero.git
+git clone https://github.com/mjsil/meau_app.git
 ```
 
 ### Mobile
 
 ```bash
 # Entre na pasta do projeto
-$ cd app_be_the_hero
+$ cd meau_app
 # Instale as dependências
-$ yarn install ou npm install
+$ flutter pub get
 # Tudo pronto para iniciar o app
-$ yarn start
+$ flutter run
 ```
 
 ## 🤔 Como contribuir
@@ -65,13 +63,13 @@ $ gh repo fork mjsil/app_be_the_hero
 
 ```bash
 # Clone o seu fork
-$ git clone url-do-seu-fork && cd app_be_the_hero
+$ git clone url-do-seu-fork && cd meau_app
 # Crie uma branch com sua feature
-$ git checkout -b minha-feature
+$ git checkout -b feature/minha-feature
 # Faça o commit das suas alterações
 $ git commit -m 'feat: Minha nova feature'
 # Faça o push para a sua branch
-$ git push origin minha-feature
+$ git push origin feature/minha-feature
 ```
 
 Depois que o merge da sua pull request for feito, você pode deletar a sua branch.
