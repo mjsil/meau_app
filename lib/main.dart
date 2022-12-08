@@ -1,5 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
-import 'utils/firebase_options.dart';
+import 'firebase_options.dart';
 import 'package:flutter/material.dart';
 import './screens/SignIn/index.dart';
 
@@ -17,10 +17,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: 'Meau',
-      home: SignInScreen()
-    );
+    return const MaterialApp(title: 'Meau', home: SignInScreen());
   }
 }
-
