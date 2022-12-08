@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
@@ -196,21 +197,26 @@ class CompleteForm extends State {
     );
   }
 
-  void signUp() {
+  Future<void> signUp() async {
     String id = const Uuid().v1();
 
     db.collection('people').doc(id).set({
       'name': _nameController.text,
       'age': _ageController.text,
-      'email': _emailController.text,
+      //'email': _emailController.text,
       'state': _stateController.text,
       'city': _cityController.text,
       'address': _addressController.text,
       'phone': _phoneController.text,
       'username': _usernameController.text,
-      'password': _passwordController.text,
-      'confirmPassword': _confirmPasswordController.text,
+      //'password': _passwordController.text,
+      //'confirmPassword': _confirmPasswordController.text,
     });
+
+    FirebaseAuth.instance.createUserWithEmailAndPassword(
+      email: _emailController.text,
+      password: _passwordController.text,
+    );
 
     const snackBar = SnackBar(
       content: Text('Cadastro Realizado!'),
