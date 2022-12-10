@@ -1,0 +1,14 @@
+.dart_tool
+android
+build
+linux
+macos
+test
+web
+windows
+.flutter-plugins
+.flutter-plugins-dependencies
+firebase-debug.log
+meau_app.iml
+package-lock.json
+C:\meau_app\pubspec.lock
