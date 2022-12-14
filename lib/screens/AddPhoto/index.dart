@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
@@ -30,6 +31,29 @@ class MyPhotoSelector extends StatefulWidget {
 
 class _MyPhotoSelectorState extends State<MyPhotoSelector> {
   File? image;
+  final FirebaseStorage storage = FirebaseStorage.instance;
+  bool uploading = false;
+  double total = 0;
+
+
+
+  Future<XFile?> getImage() async {
+    final ImagePicker _picker = ImagePicker();
+    XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    //UploadTask task = await upload(image.path);
+    return image;
+  }
+
+  Future<UploadTask> upload(String path) async {
+    File file = File(path);
+    try {
+      String ref = 'images/img-${DateTime.now().toString()}.jpg';
+      return storage.ref(ref).putFile(file);
+    } on FirebaseException catch (e) {
+      throw Exception('Erro no upload: ${e.code}');
+    }
+  }
+
 
   Future pickImage() async {
     try {
@@ -38,6 +62,20 @@ class _MyPhotoSelectorState extends State<MyPhotoSelector> {
       if (image == null) return;
 
       final imageTemp = File(image.path);
+      UploadTask task = await upload(image.path);
+
+      task.snapshotEvents.listen((TaskSnapshot snapshot) async{
+        if(snapshot.state == TaskState.running) {
+          setState(() {
+            uploading = true;
+            total = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          });
+        } else if (snapshot.state == TaskState.success) {
+          setState(() => uploading = false);
+        }
+
+      }
+      );
 
       setState(() => this.image = imageTemp);
     } on PlatformException catch (e) {
@@ -53,6 +91,21 @@ class _MyPhotoSelectorState extends State<MyPhotoSelector> {
 
       final imageTemp = File(image.path);
 
+      UploadTask task = await upload(image.path);
+
+      task.snapshotEvents.listen((TaskSnapshot snapshot) async{
+        if(snapshot.state == TaskState.running) {
+          setState(() {
+            uploading = true;
+            total = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          });
+        } else if (snapshot.state == TaskState.success) {
+          setState(() => uploading = false);
+        }
+
+      }
+      );
+
       setState(() => this.image = imageTemp);
     } on PlatformException catch (e) {
       print('Failed to pick image: $e');
@@ -63,7 +116,31 @@ class _MyPhotoSelectorState extends State<MyPhotoSelector> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text("Pegar Imagem"),
+          title: uploading
+          ? Text('${total.round()}% enviado') 
+          : const Text("Pegar Imagem"),
+          actions: [
+            uploading
+            ? const Padding(
+              padding: EdgeInsets.only(right: 12.0),
+              child: Center(
+                child: SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 3,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            )
+            : IconButton(
+              icon: const Icon(Icons.upload),
+              onPressed: (() async {
+                print('ÍCONE PRESSIONADO.');
+              }
+             ),)
+          ]
         ),
         body: Center(
           child: Column(
