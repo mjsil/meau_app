@@ -3,6 +3,7 @@ import 'screens/SplashScreen/index.dart';
 import 'utils/firebase_options.dart';
 import 'package:flutter/material.dart';
 import './screens/SignIn/index.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
