@@ -65,10 +65,10 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
-
   assets:
-  - assets/SpashScreenImage/Meau_marca.png
-  - assets/SpashScreenImage/Meau_malha.png
+    - assets/SpashScreenImage/Meau_marca.png
+    - assets/SpashScreenImage/Meau_malha.png
+    - assets/ImagemTeste/ImagemDePerfil.jpeg
 
   # To add assets to your application, add an assets section, like this:
   # assets:
