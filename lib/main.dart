@@ -2,7 +2,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'screens/SplashScreen/index.dart';
 import 'utils/firebase_options.dart';
 import 'package:flutter/material.dart';
-import './screens/SignIn/index.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,20 +17,24 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(title: 'Meau', home: MyHomePage());
+    return const MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Meau',
+      home: MyHomePage(),
+    );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, this.title}) : super(key: key);
+//MyHomePage
 
-  final String? title;
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key});
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  State<MyHomePage> createState() => _MyHomePage();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePage extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return const IntroScreen();
