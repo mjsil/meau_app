@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../AllAnimals/index.dart';
 import '../AnimalRegistry/index.dart';
+import '../MyAnimals/index.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -11,13 +13,42 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Adotar'),
       ),
-      body: Center(
-        child: Container(
-          padding: const EdgeInsets.all(16),
-          child: SizedBox(
-            width: 232,
-            height: 40,
-            child: TextButton(
+      body: Container(
+        padding: const EdgeInsets.all(16),
+        child: ListView(
+        children: <Widget>[
+          const SizedBox(height: 20),
+            TextButton(
+              style: TextButton.styleFrom(
+                backgroundColor: Colors.green,
+                foregroundColor: Colors.black,
+                textStyle: const TextStyle(
+                  fontSize: 12,
+                ),
+              ),
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const MyAnimalsScreen()),
+              ),
+              child: const Text("MEUS ANIMAIS"),
+            ),
+            const SizedBox(height: 20),
+            TextButton(
+              style: TextButton.styleFrom(
+                backgroundColor: Colors.green,
+                foregroundColor: Colors.black,
+                textStyle: const TextStyle(
+                  fontSize: 12,
+                ),
+              ),
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const AnimalsScreen()),
+              ),
+              child: const Text("ADOTAR ANIMAL"),
+            ),
+            const SizedBox(height: 100),
+            TextButton(
               style: TextButton.styleFrom(
                 backgroundColor: Colors.green,
                 foregroundColor: Colors.black,
@@ -31,9 +62,8 @@ class HomeScreen extends StatelessWidget {
               ),
               child: const Text("CADASTRAR ANIMAL"),
             ),
-          ),
-        ),
-      ), 
+        ]),
+      ),
     );
   }
 }

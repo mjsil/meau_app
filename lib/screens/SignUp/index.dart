@@ -198,30 +198,34 @@ class CompleteForm extends State {
   }
 
   Future<void> signUp() async {
-    String id = const Uuid().v1();
-
-    db.collection('people').doc(id).set({
-      'name': _nameController.text,
-      'age': _ageController.text,
-      'email': _emailController.text,
-      'state': _stateController.text,
-      'city': _cityController.text,
-      'address': _addressController.text,
-      'phone': _phoneController.text,
-      'username': _usernameController.text,
-      'password': _passwordController.text,
-      //'confirmPassword': _confirmPasswordController.text,
-    });
-
     FirebaseAuth.instance.createUserWithEmailAndPassword(
       email: _emailController.text,
       password: _passwordController.text,
-    );
-
-    const snackBar = SnackBar(
-      content: Text('Cadastro Realizado!'),
-    );
-
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    ).then((value) => (
+      db.collection('people').doc(_emailController.text).set({
+        'name': _nameController.text,
+        'age': _ageController.text,
+        //'email': _emailController.text,
+        'state': _stateController.text,
+        'city': _cityController.text,
+        'address': _addressController.text,
+        'phone': _phoneController.text,
+        'username': _usernameController.text,
+        //'password': _passwordController.text,
+        //'confirmPassword': _confirmPasswordController.text,
+      }).then((value) => (
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text('Cadastro Realizado!'),
+        ))
+      )).catchError((error) => (
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text('Error!'),
+        ))
+      ))
+    )).catchError((error) => (
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('Error!'),
+      ))
+    ));
   }
 }
