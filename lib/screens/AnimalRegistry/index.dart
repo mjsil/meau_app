@@ -1,8 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:meau_app/screens/AddAnimalPhoto/index.dart';
 import 'package:uuid/uuid.dart';
-
-import '../AddPhoto/index.dart';
 
 class AnimalRegistryScreen extends StatelessWidget {
   const AnimalRegistryScreen({super.key});
@@ -112,7 +111,8 @@ class RegisterPeopleScreen extends State {
                     onPressed: () => Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const AddPhotoScreen()),
+                              builder: (context) =>
+                                  const AddPhotoScreenAnimal()),
                         ),
                     icon: const Icon(Icons.control_point,
                         color: Color(0Xff434343))),
