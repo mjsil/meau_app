@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:meau_app/screens/AddPeoplePhoto/index.dart';
 import 'package:uuid/uuid.dart';
-
 
 class SignUpScreen extends StatelessWidget {
   const SignUpScreen({super.key});
@@ -9,11 +10,10 @@ class SignUpScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Cadastro Pessoal'),
-      ),
-      body: const SignUpForm()
-    );
+        appBar: AppBar(
+          title: const Text('Cadastro Pessoal'),
+        ),
+        body: const SignUpForm());
   }
 }
 
@@ -38,6 +38,10 @@ class CompleteForm extends State {
   final _addressController = TextEditingController();
   final _phoneController = TextEditingController();
 
+  final _usernameController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -46,6 +50,9 @@ class CompleteForm extends State {
         padding: const EdgeInsets.all(16),
         child: ListView(
           children: <Widget>[
+            const SizedBox(height: 20),
+            const Text("INFORMAÇÕES PESSOAIS"),
+            const SizedBox(height: 20),
             TextFormField(
               controller: _nameController,
               keyboardType: TextInputType.text,
@@ -57,9 +64,7 @@ class CompleteForm extends State {
                     fontSize: 14,
                   )),
             ),
-            
             const SizedBox(height: 20),
-
             TextFormField(
               controller: _ageController,
               keyboardType: TextInputType.number,
@@ -71,9 +76,7 @@ class CompleteForm extends State {
                     fontSize: 14,
                   )),
             ),
-
             const SizedBox(height: 20),
-
             TextFormField(
               controller: _emailController,
               keyboardType: TextInputType.emailAddress,
@@ -85,9 +88,7 @@ class CompleteForm extends State {
                     fontSize: 14,
                   )),
             ),
-
             const SizedBox(height: 20),
-
             TextFormField(
               controller: _stateController,
               keyboardType: TextInputType.text,
@@ -99,9 +100,7 @@ class CompleteForm extends State {
                     fontSize: 14,
                   )),
             ),
-
             const SizedBox(height: 20),
-
             TextFormField(
               controller: _cityController,
               keyboardType: TextInputType.text,
@@ -113,9 +112,7 @@ class CompleteForm extends State {
                     fontSize: 14,
                   )),
             ),
-
             const SizedBox(height: 20),
-
             TextFormField(
               controller: _addressController,
               keyboardType: TextInputType.text,
@@ -127,9 +124,7 @@ class CompleteForm extends State {
                     fontSize: 14,
                   )),
             ),
-
             const SizedBox(height: 20),
-
             TextFormField(
               controller: _phoneController,
               keyboardType: TextInputType.number,
@@ -141,11 +136,11 @@ class CompleteForm extends State {
                     fontSize: 14,
                   )),
             ),
-
             const SizedBox(height: 20),
-
+            const Text("INFORMAÇÕES DE PERFIL"),
+            const SizedBox(height: 20),
             TextFormField(
-              controller: _phoneController,
+              controller: _usernameController,
               keyboardType: TextInputType.text,
               decoration: const InputDecoration(
                   hintText: "Nome de usuário",
@@ -155,11 +150,9 @@ class CompleteForm extends State {
                     fontSize: 14,
                   )),
             ),
-
             const SizedBox(height: 20),
-
             TextFormField(
-              controller: _phoneController,
+              controller: _passwordController,
               keyboardType: TextInputType.text,
               obscureText: true,
               decoration: const InputDecoration(
@@ -170,11 +163,9 @@ class CompleteForm extends State {
                     fontSize: 14,
                   )),
             ),
-
             const SizedBox(height: 20),
-
             TextFormField(
-              controller: _phoneController,
+              controller: _confirmPasswordController,
               keyboardType: TextInputType.text,
               obscureText: true,
               decoration: const InputDecoration(
@@ -185,9 +176,36 @@ class CompleteForm extends State {
                     fontSize: 14,
                   )),
             ),
-
+            const SizedBox(height: 20),
+            const Text("FOTO DE PERFIL"),
+            const SizedBox(height: 20),
+            Container(
+              height: 128,
+              decoration: BoxDecoration(
+                color: const Color(0xfff1f2f2),
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                      onPressed: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const AddPhotoScreenPeople()),
+                          ),
+                      icon: const Icon(Icons.control_point,
+                          color: Color(0Xff434343))),
+                  const Text(
+                    "Adicionar fotos",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Color(0Xff434343)),
+                  ),
+                ],
+              ),
+            ),
             const SizedBox(height: 52),
-
             SizedBox(
               width: 232,
               height: 40,
@@ -209,23 +227,35 @@ class CompleteForm extends State {
     );
   }
 
-  void signUp() {
-    String id = const Uuid().v1();
-
-    db.collection('people').doc(id).set({
-      'name': _nameController.text,
-      'age': _ageController.text,
-      'email': _emailController.text,
-      'state': _stateController.text,
-      'city': _cityController.text,
-      'address': _addressController.text,
-      'phone': _phoneController.text,
-    });
-
-    const snackBar = SnackBar(
-      content: Text('Cadastro Realizado!'),
-    );
-
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  Future<void> signUp() async {
+    FirebaseAuth.instance.createUserWithEmailAndPassword(
+      email: _emailController.text,
+      password: _passwordController.text,
+    ).then((value) => (
+      db.collection('people').doc(_emailController.text).set({
+        'name': _nameController.text,
+        'age': _ageController.text,
+        //'email': _emailController.text,
+        'state': _stateController.text,
+        'city': _cityController.text,
+        'address': _addressController.text,
+        'phone': _phoneController.text,
+        'username': _usernameController.text,
+        //'password': _passwordController.text,
+        //'confirmPassword': _confirmPasswordController.text,
+      }).then((value) => (
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text('Cadastro Realizado!'),
+        ))
+      )).catchError((error) => (
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text('Error!'),
+        ))
+      ))
+    )).catchError((error) => (
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('Error!'),
+      ))
+    ));
   }
 }
