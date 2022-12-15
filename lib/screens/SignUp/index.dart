@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:meau_app/screens/AddPeoplePhoto/index.dart';
 import 'package:uuid/uuid.dart';
 
 class SignUpScreen extends StatelessWidget {
@@ -174,6 +175,35 @@ class CompleteForm extends State {
                     color: Colors.black,
                     fontSize: 14,
                   )),
+            ),
+            const SizedBox(height: 20),
+            const Text("FOTO DE PERFIL"),
+            const SizedBox(height: 20),
+            Container(
+              height: 128,
+              decoration: BoxDecoration(
+                color: const Color(0xfff1f2f2),
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                      onPressed: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const AddPhotoScreenPeople()),
+                          ),
+                      icon: const Icon(Icons.control_point,
+                          color: Color(0Xff434343))),
+                  const Text(
+                    "Adicionar fotos",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Color(0Xff434343)),
+                  ),
+                ],
+              ),
             ),
             const SizedBox(height: 52),
             SizedBox(
