@@ -5,7 +5,8 @@ import '../AnimalRegistry/index.dart';
 import '../MyAnimals/index.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({super.key, required this.email,});
+  final String email;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +29,7 @@ class HomeScreen extends StatelessWidget {
               ),
               onPressed: () => Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const MyAnimalsScreen()),
+                MaterialPageRoute(builder: (context) => MyAnimalsScreen(user: (email))),
               ),
               child: const Text("MEUS ANIMAIS"),
             ),
