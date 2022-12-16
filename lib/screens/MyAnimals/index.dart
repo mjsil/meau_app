@@ -2,7 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class MyAnimalsScreen extends StatelessWidget {
-  const MyAnimalsScreen({super.key});
+  const MyAnimalsScreen({super.key, required this.user});
+  final String user;
 
   @override
   Widget build(BuildContext context) {
@@ -10,12 +11,14 @@ class MyAnimalsScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Meus Animais'),
       ),
-      body: const MyAnimalsView());
+      body: MyAnimalsView(user: user));
   }
 }
 
 class MyAnimalsView extends StatefulWidget {
-  const MyAnimalsView({super.key});
+  final String user;
+
+  const MyAnimalsView({ Key? key, required this.user }): super(key: key);
 
   @override
   CompleteMyAnimals createState() {
@@ -23,7 +26,7 @@ class MyAnimalsView extends StatefulWidget {
   }
 }
 
-class CompleteMyAnimals extends State {
+class CompleteMyAnimals extends State<MyAnimalsView> {
   FirebaseFirestore db = FirebaseFirestore.instance;
 
   @override
@@ -44,7 +47,7 @@ class CompleteMyAnimals extends State {
           }
 
           else {
-            return const Text("CARREGANDO...");
+            return Text('>>>> ${widget.user}');
           }
         },
       ) 
@@ -53,7 +56,7 @@ class CompleteMyAnimals extends State {
 
   Future<List<String>> getAnimals() async {
     List<String> animals= [];
-    Stream<QuerySnapshot> productRef = db.collection("animal").where("owner", isEqualTo: "pedro@gmail.com").snapshots();
+    Stream<QuerySnapshot> productRef = db.collection("animal").where("owner", isEqualTo: widget.user).snapshots();
 
     productRef.forEach((field) {
       field.docs.asMap().forEach((index, data) {

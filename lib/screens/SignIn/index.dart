@@ -116,10 +116,10 @@ class CompleteForm extends State {
     );
   }
 
-  void navigationHomeScreen() {
+  void navigationHomeScreen(email) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const HomeScreen()),
+      MaterialPageRoute(builder: (context) => HomeScreen(email: ('$email'))),
     );
   }
 
@@ -130,7 +130,7 @@ class CompleteForm extends State {
         password: _passwordController.text,
       );
 
-      navigationHomeScreen();
+      navigationHomeScreen(_emailController.text);
     } catch (error) {
       const snackBar = SnackBar(
         content: Text('Error!'),
