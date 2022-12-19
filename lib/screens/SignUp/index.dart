@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:meau_app/screens/AddPeoplePhoto/index.dart';
-import 'package:uuid/uuid.dart';
+
+import '../AddPeoplePhoto/index.dart';
 
 class SignUpScreen extends StatelessWidget {
   const SignUpScreen({super.key});
@@ -228,34 +228,37 @@ class CompleteForm extends State {
   }
 
   Future<void> signUp() async {
-    FirebaseAuth.instance.createUserWithEmailAndPassword(
-      email: _emailController.text,
-      password: _passwordController.text,
-    ).then((value) => (
-      db.collection('people').doc(_emailController.text).set({
-        'name': _nameController.text,
-        'age': _ageController.text,
-        //'email': _emailController.text,
-        'state': _stateController.text,
-        'city': _cityController.text,
-        'address': _addressController.text,
-        'phone': _phoneController.text,
-        'username': _usernameController.text,
-        //'password': _passwordController.text,
-        //'confirmPassword': _confirmPasswordController.text,
-      }).then((value) => (
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text('Cadastro Realizado!'),
-        ))
-      )).catchError((error) => (
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text('Error!'),
-        ))
-      ))
-    )).catchError((error) => (
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('Error!'),
-      ))
-    ));
+    FirebaseAuth.instance
+        .createUserWithEmailAndPassword(
+          email: _emailController.text,
+          password: _passwordController.text,
+        )
+        .then((value) => (db
+            .collection('people')
+            .doc(_emailController.text)
+            .set({
+              'name': _nameController.text,
+              'age': _ageController.text,
+              //'email': _emailController.text,
+              'state': _stateController.text,
+              'city': _cityController.text,
+              'address': _addressController.text,
+              'phone': _phoneController.text,
+              'username': _usernameController.text,
+              //'password': _passwordController.text,
+              //'confirmPassword': _confirmPasswordController.text,
+            })
+            .then((value) =>
+                (ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  content: Text('Cadastro Realizado!'),
+                ))))
+            .catchError((error) =>
+                (ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  content: Text('Error!'),
+                ))))))
+        .catchError((error) =>
+            (ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              content: Text('Error!'),
+            ))));
   }
 }
