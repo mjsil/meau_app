@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:meau_app/screens/SideBarMenu/index.dart';
 
-class IntroductionScreen extends StatefulWidget {
-  const IntroductionScreen({super.key});
+import '../AllAnimals/index.dart';
+import '../AnimalRegistry/index.dart';
+import '../Login/index.dart';
+import '../MyAnimals/index.dart';
+import '../SideBarMenu/index.dart';
 
-  @override
-  State<IntroductionScreen> createState() => _IntroductionScreenState();
-}
+//IntroductionScreen
 
-class _IntroductionScreenState extends State<IntroductionScreen> {
+class IntroductionScreen extends StatelessWidget {
+  const IntroductionScreen({
+    super.key,
+    required this.email,
+  });
+  final String email;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,9 +74,11 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
               child: Material(
                 color: Colors.transparent,
                 child: InkWell(
-                  onTap: () {
-                    print("tapped");
-                  },
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const AnimalsScreen()),
+                  ),
                   child: const SizedBox(
                     width: 232.0,
                     height: 40.0,
@@ -110,15 +118,17 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
               child: Material(
                 color: Colors.transparent,
                 child: InkWell(
-                  onTap: () {
-                    print("tapped");
-                  },
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => MyAnimalsScreen(user: (email))),
+                  ),
                   child: const SizedBox(
                     width: 232.0,
                     height: 40.0,
                     child: Center(
                       child: Text(
-                        "AJUDAR",
+                        "MEUS ANIMAIS",
                         style: TextStyle(
                           fontSize: 12.0,
                           fontFamily: 'Roboto',
@@ -152,9 +162,11 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
               child: Material(
                 color: Colors.transparent,
                 child: InkWell(
-                  onTap: () {
-                    print("tapped");
-                  },
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const AnimalRegistryScreen()),
+                  ),
                   child: const SizedBox(
                     width: 232.0,
                     height: 40.0,
@@ -181,9 +193,10 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                   fontSize: 16.0,
                 ),
               ),
-              onPressed: () {
-                print("Login Clicked");
-              },
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const LoginScreen()),
+              ),
               child: const Text(
                 "login",
                 style: TextStyle(
@@ -195,7 +208,8 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
             ),
             //Meau logo
             const SizedBox(height: 68),
-            Image.asset("assets/Meau_marca_2.png", width: 122, height: 44),
+            Image.asset("assets/IntroductionLogo/Meau_marca_2.png",
+                width: 122, height: 44),
             const SizedBox(height: 32),
           ],
         ),
