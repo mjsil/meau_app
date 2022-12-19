@@ -1,6 +1,7 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:meau_app/screens/SignIn/index.dart';
+
+import '../Login/index.dart';
 
 class IntroScreen extends StatelessWidget {
   const IntroScreen({super.key});
@@ -9,10 +10,10 @@ class IntroScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(alignment: Alignment.center, children: <Widget>[
       AnimatedSplashScreen(
-        duration: 2000,
+        duration: 1000,
         centered: true,
         splash: Container(),
-        nextScreen: const SignInScreen(),
+        nextScreen: const LoginScreen(),
       ),
       Scaffold(
         backgroundColor: const Color.fromRGBO(136, 201, 191, 1),
