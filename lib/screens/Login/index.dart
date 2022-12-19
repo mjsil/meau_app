@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:meau_app/screens/SideBarMenu/index.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+import '../Introduction/index.dart';
+import '../SideBarMenu/index.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -11,9 +14,14 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final _formKey = GlobalKey<FormState>();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _formKey,
       backgroundColor: const Color.fromARGB(255, 250, 250, 250),
       appBar: AppBar(
         title: const Text(
@@ -36,17 +44,18 @@ class _LoginScreenState extends State<LoginScreen> {
           children: [
             const SizedBox(height: 64),
             //User Name
-            const SizedBox(
+            SizedBox(
               width: 312,
               child: TextField(
-                style: TextStyle(
+                style: const TextStyle(
                   color: Color.fromARGB(255, 189, 189, 189),
                   fontSize: 14,
                   fontFamily: 'Roboto',
                   fontWeight: FontWeight.w400,
                 ),
+                controller: _emailController,
                 keyboardType: TextInputType.text,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   isDense: true,
                   contentPadding: EdgeInsets.symmetric(
                     horizontal: 0,
@@ -65,23 +74,25 @@ class _LoginScreenState extends State<LoginScreen> {
                   focusedBorder: UnderlineInputBorder(
                       borderSide: BorderSide(
                           color: Color.fromARGB(255, 136, 201, 191))),
-                  hintText: "Nome de usuário",
+                  hintText: "Email",
                 ),
               ),
             ),
             const SizedBox(height: 20),
             //Password
-            const SizedBox(
+            SizedBox(
               width: 312,
               child: TextField(
-                style: TextStyle(
+                obscureText: true,
+                style: const TextStyle(
                   color: Color.fromARGB(255, 189, 189, 189),
                   fontSize: 14,
                   fontFamily: 'Roboto',
                   fontWeight: FontWeight.w400,
                 ),
+                controller: _passwordController,
                 keyboardType: TextInputType.text,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   isDense: true,
                   contentPadding: EdgeInsets.symmetric(
                     horizontal: 0,
@@ -125,9 +136,7 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Material(
                 color: Colors.transparent,
                 child: InkWell(
-                  onTap: () {
-                    print("tapped");
-                  },
+                  onTap: () => sigIn(),
                   child: const SizedBox(
                     width: 232.0,
                     height: 40.0,
@@ -147,9 +156,6 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
             const SizedBox(height: 72),
-            //Enter with facebook
-            //Color.fromARGB(255, 247, 247, 247)
-            //const Color.fromARGB(255, 25, 79, 124)
             Container(
               alignment: Alignment.center,
               width: 232.0,
@@ -185,7 +191,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               color: Color.fromARGB(255, 247, 247, 247)),
                           SizedBox(width: 15),
                           Text(
-                            "ENTRAR COM GOOGLE",
+                            "ENTRAR COM FACEBOOK",
                             style: TextStyle(
                               fontSize: 12.0,
                               fontFamily: 'Roboto',
@@ -201,8 +207,6 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
             const SizedBox(height: 8),
-            //Enter with Google
-            //const Color.fromARGB(255, 241, 95, 92)
             Container(
               alignment: Alignment.center,
               width: 232.0,
@@ -257,5 +261,30 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
+  }
+
+  void navigationHomeScreen(email) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => IntroductionScreen(email: ('$email'))),
+    );
+  }
+
+  void sigIn() async {
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: _emailController.text,
+        password: _passwordController.text,
+      );
+
+      navigationHomeScreen(_emailController.text);
+    } catch (error) {
+      const snackBar = SnackBar(
+        content: Text('Error!'),
+      );
+
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
   }
 }
