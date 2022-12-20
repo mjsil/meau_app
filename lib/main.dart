@@ -1,5 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:meau_app/screens/Introduction/index.dart';
+import 'package:meau_app/services/auth/index.dart';
+import 'package:meau_app/wrapper.dart';
+import 'package:provider/provider.dart';
 
 import 'utils/firebase_options.dart';
 import 'screens/SplashScreen/index.dart';
@@ -18,24 +22,21 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Meau',
-      home: MyHomePage(),
+    return MultiProvider(
+      providers: [
+        Provider<AuthService>(
+          create: (_) => AuthService(),
+        ),
+      ],
+      child: MaterialApp(
+        title: 'Meau',
+        initialRoute: '/',
+        routes: {
+          '/': (context) => const Wrapper(),
+          '/login': (context) => const IntroScreen(),
+          '/home': (context) => const IntroductionScreen(),
+        },
+      )
     );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
-
-  @override
-  State<MyHomePage> createState() => _MyHomePage();
-}
-
-class _MyHomePage extends State<MyHomePage> {
-  @override
-  Widget build(BuildContext context) {
-    return const IntroScreen();
   }
 }

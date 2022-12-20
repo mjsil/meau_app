@@ -1,27 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:meau_app/services/auth/index.dart';
+import 'package:provider/provider.dart';
 
-import '../Introduction/index.dart';
 import '../SideBarMenu/index.dart';
 
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
-}
-
-class _LoginScreenState extends State<LoginScreen> {
-  final _formKey = GlobalKey<FormState>();
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-
-  @override
   Widget build(BuildContext context) {
+    final TextEditingController emailController = TextEditingController();
+    final TextEditingController passwordController = TextEditingController();
+
+    final authService = Provider.of<AuthService>(context);
+
     return Scaffold(
-      key: _formKey,
       backgroundColor: const Color.fromARGB(255, 250, 250, 250),
       appBar: AppBar(
         title: const Text(
@@ -41,7 +36,7 @@ class _LoginScreenState extends State<LoginScreen> {
       drawer: const NavBar(),
       body: Center(
         child: Column(
-          children: [
+          children: <Widget>[
             const SizedBox(height: 64),
             //User Name
             SizedBox(
@@ -53,7 +48,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   fontFamily: 'Roboto',
                   fontWeight: FontWeight.w400,
                 ),
-                controller: _emailController,
+                controller: emailController,
                 keyboardType: TextInputType.text,
                 decoration: const InputDecoration(
                   isDense: true,
@@ -90,7 +85,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   fontFamily: 'Roboto',
                   fontWeight: FontWeight.w400,
                 ),
-                controller: _passwordController,
+                controller: passwordController,
                 keyboardType: TextInputType.text,
                 decoration: const InputDecoration(
                   isDense: true,
@@ -136,7 +131,21 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Material(
                 color: Colors.transparent,
                 child: InkWell(
-                  onTap: () => sigIn(),
+                  onTap: () async {
+                    try {
+                      await authService.signInWithEmailAndPassword(
+                        emailController.text, 
+                        passwordController.text,
+                      );
+
+                      // ignore: use_build_context_synchronously
+                      Navigator.of(context).pushNamed("/home");
+                    } catch(error) {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text('Usuário não encontrado'),
+                      ));
+                    }
+                  },
                   child: const SizedBox(
                     width: 232.0,
                     height: 40.0,
@@ -261,30 +270,5 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
-  }
-
-  void navigationHomeScreen(email) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) => IntroductionScreen(email: ('$email'))),
-    );
-  }
-
-  void sigIn() async {
-    try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: _emailController.text,
-        password: _passwordController.text,
-      );
-
-      navigationHomeScreen(_emailController.text);
-    } catch (error) {
-      const snackBar = SnackBar(
-        content: Text('Error!'),
-      );
-
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    }
-  }
+  } 
 }
