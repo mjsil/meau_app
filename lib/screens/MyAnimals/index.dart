@@ -1,69 +1,66 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../../models/user/index.dart';
+import '../../services/auth/index.dart';
 
 class MyAnimalsScreen extends StatelessWidget {
-  const MyAnimalsScreen({super.key, required this.user});
-  final String user;
+  const MyAnimalsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Meus Animais'),
-      ),
-      body: MyAnimalsView(user: user));
-  }
-}
+    final authService = Provider.of<AuthService>(context);
 
-class MyAnimalsView extends StatefulWidget {
-  final String user;
+    return StreamBuilder<User?>(
+      stream: authService.user,
+      builder: (_, AsyncSnapshot<User?> snapshot) {
+        final User? user = snapshot.data;
+        final Stream<QuerySnapshot> animals = FirebaseFirestore.instance
+          .collection('animal')
+          .where("owner", isEqualTo: user?.uid)
+          .snapshots();
+        
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text('Adotar'),
+          ),
+          body: Container(
+            padding: const EdgeInsets.all(16),
+            child: ListView(
+              children: <Widget>[
+                SizedBox(
+                  height: 300,
+                  child: StreamBuilder<QuerySnapshot>(
+                    stream: animals,
+                    builder: (
+                      BuildContext context,
+                      AsyncSnapshot<QuerySnapshot> snapshot,  
+                    ) {
+                      if(snapshot.connectionState == ConnectionState.waiting) {
+                        return const Scaffold(
+                          body: Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                        );
+                      }
 
-  const MyAnimalsView({ Key? key, required this.user }): super(key: key);
+                      final data = snapshot.requireData;
 
-  @override
-  CompleteMyAnimals createState() {
-    return CompleteMyAnimals();
-  }
-}
-
-class CompleteMyAnimals extends State<MyAnimalsView> {
-  FirebaseFirestore db = FirebaseFirestore.instance;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: FutureBuilder<List<String>?>(
-        future: getAnimals(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData &&
-            snapshot.connectionState == ConnectionState.done) {
-
-            return ListView.builder(
-              itemCount: snapshot.data!.length,
-              itemBuilder: (context, index) {
-                return Text(snapshot.data?[index] ?? "got null");
-              },
-            );
-          }
-
-          else {
-            return Text('>>>> ${widget.user}');
-          }
-        },
-      ) 
+                      return ListView.builder(
+                        itemCount: data.size,
+                        itemBuilder: (context, index) {
+                          return Text(data.docs[index]['name']);
+                        }
+                      );
+                    },
+                  ),
+                ),
+              ]
+            ),
+          ),
+        );
+      }
     );
-  }
-
-  Future<List<String>> getAnimals() async {
-    List<String> animals= [];
-    Stream<QuerySnapshot> productRef = db.collection("animal").where("owner", isEqualTo: widget.user).snapshots();
-
-    productRef.forEach((field) {
-      field.docs.asMap().forEach((index, data) {
-        animals.add(field.docs[index]["name"]);
-      });
-    });
-
-    return animals;
   }
 }

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:meau_app/screens/AnimalRegistry/index.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+import '../AnimalRegistry/index.dart';
+import '../PreLogin/index.dart';
 
 class NavBar extends StatefulWidget {
   const NavBar({super.key});
@@ -10,6 +13,7 @@ class NavBar extends StatefulWidget {
 
 class _NavBarState extends State<NavBar> {
   bool _customTileExpanded = false;
+  final FirebaseAuth authInstance = FirebaseAuth.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -46,12 +50,20 @@ class _NavBarState extends State<NavBar> {
               ListTile(
                 title: const Text('Cadastrar um pet'),
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const AnimalRegistryScreen(),
-                    ),
-                  );
+                  final User? user = authInstance.currentUser;
+                  if (user == null) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const PreLoginScreen()),
+                    );
+                  } else {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const AnimalRegistryScreen()),
+                    );
+                  }
                 },
               ),
             ],

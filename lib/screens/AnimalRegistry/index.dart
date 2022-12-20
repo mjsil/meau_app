@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:meau_app/screens/AddAnimalPhoto/index.dart';
 import 'package:uuid/uuid.dart';
+
+import '../AddAnimalPhoto/index.dart';
 
 class AnimalRegistryScreen extends StatelessWidget {
   const AnimalRegistryScreen({super.key});
@@ -10,14 +11,11 @@ class AnimalRegistryScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     const appTitle = 'Cadastro do Animal';
 
-    return MaterialApp(
-      title: appTitle,
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text(appTitle),
-        ),
-        body: const MyCustomForm(),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(appTitle),
       ),
+      body: const MyCustomForm(),
     );
   }
 }
@@ -26,12 +24,12 @@ class MyCustomForm extends StatefulWidget {
   const MyCustomForm({super.key});
 
   @override
-  RegisterPeopleScreen createState() {
-    return RegisterPeopleScreen();
+  AnimalRegistry createState() {
+    return AnimalRegistry();
   }
 }
 
-class RegisterPeopleScreen extends State {
+class AnimalRegistry extends State {
   //Instancia Firestore
   FirebaseFirestore db = FirebaseFirestore.instance;
 

@@ -1,52 +1,41 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:meau_app/screens/AddPeoplePhoto/index.dart';
-import 'package:uuid/uuid.dart';
+import 'package:provider/provider.dart';
+
+import '../../services/auth/index.dart';
+import '../AddPeoplePhoto/index.dart';
 
 class SignUpScreen extends StatelessWidget {
   const SignUpScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final authService = Provider.of<AuthService>(context);
+
+    final TextEditingController nameController = TextEditingController();
+    final TextEditingController ageController = TextEditingController();
+    final TextEditingController emailController = TextEditingController();
+    final TextEditingController stateController = TextEditingController();
+    final TextEditingController cityController = TextEditingController();
+    final TextEditingController addressController = TextEditingController();
+    final TextEditingController phoneController = TextEditingController();
+
+    final TextEditingController usernameController = TextEditingController();
+    final TextEditingController passwordController = TextEditingController();
+    final TextEditingController confirmPasswordController = TextEditingController();
+
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Cadastro Pessoal'),
+      backgroundColor: const Color.fromARGB(255, 250, 250, 250),
+      appBar: AppBar(
+        title: const Text(
+          "Cadastro Pessoal",
+          style: TextStyle(
+            color: Color.fromARGB(255, 67, 67, 67),
+            fontFamily: 'Roboto',
+            fontWeight: FontWeight.w500,
+          ),
         ),
-        body: const SignUpForm());
-  }
-}
-
-class SignUpForm extends StatefulWidget {
-  const SignUpForm({super.key});
-
-  @override
-  CompleteForm createState() {
-    return CompleteForm();
-  }
-}
-
-class CompleteForm extends State {
-  FirebaseFirestore db = FirebaseFirestore.instance;
-
-  final _formKey = GlobalKey<FormState>();
-  final _nameController = TextEditingController();
-  final _ageController = TextEditingController();
-  final _emailController = TextEditingController();
-  final _stateController = TextEditingController();
-  final _cityController = TextEditingController();
-  final _addressController = TextEditingController();
-  final _phoneController = TextEditingController();
-
-  final _usernameController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final _confirmPasswordController = TextEditingController();
-
-  @override
-  Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: Container(
+      ),
+      body: Container(
         padding: const EdgeInsets.all(16),
         child: ListView(
           children: <Widget>[
@@ -54,7 +43,7 @@ class CompleteForm extends State {
             const Text("INFORMAÇÕES PESSOAIS"),
             const SizedBox(height: 20),
             TextFormField(
-              controller: _nameController,
+              controller: nameController,
               keyboardType: TextInputType.text,
               decoration: const InputDecoration(
                   hintText: "Nome completo",
@@ -66,7 +55,7 @@ class CompleteForm extends State {
             ),
             const SizedBox(height: 20),
             TextFormField(
-              controller: _ageController,
+              controller: ageController,
               keyboardType: TextInputType.number,
               decoration: const InputDecoration(
                   hintText: "Idade",
@@ -78,7 +67,7 @@ class CompleteForm extends State {
             ),
             const SizedBox(height: 20),
             TextFormField(
-              controller: _emailController,
+              controller: emailController,
               keyboardType: TextInputType.emailAddress,
               decoration: const InputDecoration(
                   hintText: "E-mail",
@@ -90,7 +79,7 @@ class CompleteForm extends State {
             ),
             const SizedBox(height: 20),
             TextFormField(
-              controller: _stateController,
+              controller: stateController,
               keyboardType: TextInputType.text,
               decoration: const InputDecoration(
                   hintText: "Estado",
@@ -102,7 +91,7 @@ class CompleteForm extends State {
             ),
             const SizedBox(height: 20),
             TextFormField(
-              controller: _cityController,
+              controller: cityController,
               keyboardType: TextInputType.text,
               decoration: const InputDecoration(
                   hintText: "Cidade",
@@ -114,7 +103,7 @@ class CompleteForm extends State {
             ),
             const SizedBox(height: 20),
             TextFormField(
-              controller: _addressController,
+              controller: addressController,
               keyboardType: TextInputType.text,
               decoration: const InputDecoration(
                   hintText: "Endereço",
@@ -126,7 +115,7 @@ class CompleteForm extends State {
             ),
             const SizedBox(height: 20),
             TextFormField(
-              controller: _phoneController,
+              controller: phoneController,
               keyboardType: TextInputType.number,
               decoration: const InputDecoration(
                   hintText: "Telefone",
@@ -140,7 +129,7 @@ class CompleteForm extends State {
             const Text("INFORMAÇÕES DE PERFIL"),
             const SizedBox(height: 20),
             TextFormField(
-              controller: _usernameController,
+              controller: usernameController,
               keyboardType: TextInputType.text,
               decoration: const InputDecoration(
                   hintText: "Nome de usuário",
@@ -152,7 +141,7 @@ class CompleteForm extends State {
             ),
             const SizedBox(height: 20),
             TextFormField(
-              controller: _passwordController,
+              controller: passwordController,
               keyboardType: TextInputType.text,
               obscureText: true,
               decoration: const InputDecoration(
@@ -165,16 +154,17 @@ class CompleteForm extends State {
             ),
             const SizedBox(height: 20),
             TextFormField(
-              controller: _confirmPasswordController,
+              controller: confirmPasswordController,
               keyboardType: TextInputType.text,
               obscureText: true,
               decoration: const InputDecoration(
-                  hintText: "Confirmar senha",
-                  contentPadding: EdgeInsets.all(8),
-                  labelStyle: TextStyle(
-                    color: Colors.black,
-                    fontSize: 14,
-                  )),
+                hintText: "Confirmar senha",
+                contentPadding: EdgeInsets.all(8),
+                labelStyle: TextStyle(
+                  color: Colors.black,
+                  fontSize: 14,
+                ),
+              ),
             ),
             const SizedBox(height: 20),
             const Text("FOTO DE PERFIL"),
@@ -189,14 +179,15 @@ class CompleteForm extends State {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   IconButton(
-                      onPressed: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    const AddPhotoScreenPeople()),
-                          ),
-                      icon: const Icon(Icons.control_point,
-                          color: Color(0Xff434343))),
+                    onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                          const AddPhotoScreenPeople(),
+                      ),
+                  ),
+                  icon: const Icon(Icons.control_point,
+                    color: Color(0Xff434343))),
                   const Text(
                     "Adicionar fotos",
                     textAlign: TextAlign.center,
@@ -217,7 +208,19 @@ class CompleteForm extends State {
                     fontSize: 12,
                   ),
                 ),
-                onPressed: () => signUp(),
+                onPressed: () async {
+                  await authService.createUserWithEmailAndPassword(
+                    emailController.text, 
+                    passwordController.text,
+                    nameController.text,
+                    ageController.text,
+                    stateController.text,
+                    cityController.text,
+                    addressController.text,
+                    phoneController.text,
+                    usernameController.text,
+                  );
+                }, 
                 child: const Text("FAZER CADASTRO"),
               ),
             ),
@@ -225,37 +228,5 @@ class CompleteForm extends State {
         ),
       ),
     );
-  }
-
-  Future<void> signUp() async {
-    FirebaseAuth.instance.createUserWithEmailAndPassword(
-      email: _emailController.text,
-      password: _passwordController.text,
-    ).then((value) => (
-      db.collection('people').doc(_emailController.text).set({
-        'name': _nameController.text,
-        'age': _ageController.text,
-        //'email': _emailController.text,
-        'state': _stateController.text,
-        'city': _cityController.text,
-        'address': _addressController.text,
-        'phone': _phoneController.text,
-        'username': _usernameController.text,
-        //'password': _passwordController.text,
-        //'confirmPassword': _confirmPasswordController.text,
-      }).then((value) => (
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text('Cadastro Realizado!'),
-        ))
-      )).catchError((error) => (
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text('Error!'),
-        ))
-      ))
-    )).catchError((error) => (
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('Error!'),
-      ))
-    ));
   }
 }
