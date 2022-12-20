@@ -7,14 +7,8 @@ import '../Login/index.dart';
 import '../MyAnimals/index.dart';
 import '../SideBarMenu/index.dart';
 
-//IntroductionScreen
-
 class IntroductionScreen extends StatelessWidget {
-  const IntroductionScreen({
-    super.key,
-    required this.email,
-  });
-  final String email;
+  const IntroductionScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +71,7 @@ class IntroductionScreen extends StatelessWidget {
                   onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const AnimalsScreen()),
+                        builder: (context) => AnimalsScreen()),
                   ),
                   child: const SizedBox(
                     width: 232.0,
@@ -121,7 +115,7 @@ class IntroductionScreen extends StatelessWidget {
                   onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => MyAnimalsScreen(user: (email))),
+                        builder: (context) => const MyAnimalsScreen()),
                   ),
                   child: const SizedBox(
                     width: 232.0,

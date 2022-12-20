@@ -2,65 +2,52 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class AnimalsScreen extends StatelessWidget {
-  const AnimalsScreen({super.key});
+  final Stream<QuerySnapshot> animals = FirebaseFirestore.instance
+    .collection('animal')
+    .snapshots();
+
+  AnimalsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Adotar Animal'),
+        title: const Text('Adotar'),
       ),
-      body: const AnimalsView());
-  }
-}
+      body: Container(
+        padding: const EdgeInsets.all(16),
+        child: ListView(
+          children: <Widget>[
+            SizedBox(
+              height: 300,
+              child: StreamBuilder<QuerySnapshot>(
+                stream: animals,
+                builder: (
+                  BuildContext context,
+                  AsyncSnapshot<QuerySnapshot> snapshot,  
+                ) {
+                  if(snapshot.connectionState == ConnectionState.waiting) {
+                    return const Scaffold(
+                      body: Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    );
+                  }
 
-class AnimalsView extends StatefulWidget {
-  const AnimalsView({super.key});
+                  final data = snapshot.requireData;
 
-  @override
-  CompleteAnimals createState() {
-    return CompleteAnimals();
-  }
-}
-
-class CompleteAnimals extends State {
-  FirebaseFirestore db = FirebaseFirestore.instance;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: FutureBuilder<List<String>?>(
-        future: getAnimals(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData &&
-            snapshot.connectionState == ConnectionState.done) {
-
-            return ListView.builder(
-              itemCount: snapshot.data!.length,
-              itemBuilder: (context, index) {
-                return Text(snapshot.data?[index] ?? "got null");
-              },
-            );
-          }
-
-          else {
-            return const Text("CARREGANDO...");
-          }
-        },
-      ) 
+                  return ListView.builder(
+                    itemCount: data.size,
+                    itemBuilder: (context, index) {
+                      return Text(data.docs[index]['name']);
+                    }
+                  );
+                },
+              ),
+            ),
+          ]
+        ),
+      ),
     );
-  }
-
-  Future<List<String>> getAnimals() async {
-    List<String> animals= [];
-    Stream<QuerySnapshot> productRef = db.collection("animal").snapshots();
-
-    productRef.forEach((field) {
-      field.docs.asMap().forEach((index, data) {
-        animals.add(field.docs[index]["name"]);
-      });
-    });
-
-    return animals;
   }
 }
