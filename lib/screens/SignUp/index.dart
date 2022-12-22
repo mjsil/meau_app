@@ -209,17 +209,26 @@ class SignUpScreen extends StatelessWidget {
                   ),
                 ),
                 onPressed: () async {
-                  await authService.createUserWithEmailAndPassword(
-                    emailController.text, 
-                    passwordController.text,
-                    nameController.text,
-                    ageController.text,
-                    stateController.text,
-                    cityController.text,
-                    addressController.text,
-                    phoneController.text,
-                    usernameController.text,
-                  );
+                  try {
+                    await authService.createUserWithEmailAndPassword(
+                      emailController.text, 
+                      passwordController.text,
+                      nameController.text,
+                      ageController.text,
+                      stateController.text,
+                      cityController.text,
+                      addressController.text,
+                      phoneController.text,
+                      usernameController.text,
+                    ); 
+
+                    // ignore: use_build_context_synchronously
+                    Navigator.of(context).pushNamed("/login");
+                  } catch(error) {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text('Pessoa não cadastrado!'),
+                    ));
+                  } 
                 }, 
                 child: const Text("FAZER CADASTRO"),
               ),
