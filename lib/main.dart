@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:meau_app/screens/Introduction/index.dart';
+import 'package:meau_app/screens/Login/index.dart';
 import 'package:meau_app/services/auth/index.dart';
 import 'package:meau_app/wrapper.dart';
 import 'package:provider/provider.dart';
@@ -33,7 +34,8 @@ class MyApp extends StatelessWidget {
         initialRoute: '/',
         routes: {
           '/': (context) => const Wrapper(),
-          '/login': (context) => const IntroScreen(),
+          '/intro': (context) => const IntroScreen(),
+          '/login': ((context) => const LoginScreen()),
           '/home': (context) => const IntroductionScreen(),
         },
       )
