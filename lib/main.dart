@@ -24,21 +24,21 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [
-        Provider<AuthService>(
-          create: (_) => AuthService(),
-        ),
-      ],
-      child: MaterialApp(
-        title: 'Meau',
-        initialRoute: '/',
-        routes: {
-          '/': (context) => const Wrapper(),
-          '/intro': (context) => const IntroScreen(),
-          '/login': ((context) => const LoginScreen()),
-          '/home': (context) => const IntroductionScreen(),
-        },
-      )
-    );
+        providers: [
+          Provider<AuthService>(
+            create: (_) => AuthService(),
+          ),
+        ],
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'Meau',
+          initialRoute: '/',
+          routes: {
+            '/': (context) => const Wrapper(),
+            '/intro': (context) => const IntroScreen(),
+            '/login': ((context) => const LoginScreen()),
+            '/home': (context) => const IntroductionScreen(),
+          },
+        ));
   }
 }
