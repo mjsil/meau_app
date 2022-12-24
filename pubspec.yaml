@@ -75,6 +75,7 @@ flutter:
     - assets/SpashScreenImage/Meau_malha.png
     - assets/ImagemTeste/ImagemDePerfil.jpeg
     - assets/IntroductionLogo/Meau_marca_2.png
+    - assets/ImagemTeste/pet.jpeg
 
   fonts: 
   - 

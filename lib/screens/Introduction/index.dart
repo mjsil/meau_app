@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../AdoptAnimal/index.dart';
 import '../AllAnimals/index.dart';
 import '../AnimalRegistry/index.dart';
 import '../Login/index.dart';
@@ -71,7 +72,7 @@ class IntroductionScreen extends StatelessWidget {
                   onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => AnimalsScreen()),
+                        builder: (context) => const AdoptAnimal()),
                   ),
                   child: const SizedBox(
                     width: 232.0,
