@@ -95,7 +95,7 @@ class _AdoptAnimalState extends State<AdoptAnimal> {
                                 ],
                               ),
                               alignment: Alignment.topLeft,
-                              child: ListView(
+                              child: Column(
                                 children: [
                                   const SizedBox(height: 5),
                                   Row(
