@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../AdoptFinal/index.dart';
+
 class AdoptAnimal extends StatefulWidget {
   const AdoptAnimal({Key? key}) : super(key: key);
 
@@ -115,6 +117,17 @@ class _AdoptAnimalState extends State<AdoptAnimal> {
                                           'assets/ImagemTeste/pet.jpeg'),
                                       fit: BoxFit.cover,
                                     )),
+                                    child: Material(
+                                      color: Colors.transparent,
+                                      child: InkWell(
+                                        onTap: () => Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const AdoptFinalScreen()),
+                                        ),
+                                      ),
+                                    ),
                                   ),
                                   const SizedBox(height: 5),
                                   Wrap(
