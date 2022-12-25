@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 
 import '../../models/user/index.dart';
 import '../../services/auth/index.dart';
+import '../AdoptFinal/index.dart';
 import '../SideBarMenu/index.dart';
 
 class MyAnimalsScreen extends StatelessWidget {
@@ -137,6 +138,17 @@ class MyAnimalsScreen extends StatelessWidget {
                                                 'assets/ImagemTeste/pet.jpeg'),
                                             fit: BoxFit.cover,
                                           )),
+                                          child: Material(
+                                            color: Colors.transparent,
+                                            child: InkWell(
+                                              onTap: () => Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        const AdoptFinalScreen()),
+                                              ),
+                                            ),
+                                          ),
                                         ),
                                         const SizedBox(height: 5),
                                         Wrap(
