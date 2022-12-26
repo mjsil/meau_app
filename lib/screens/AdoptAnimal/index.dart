@@ -95,7 +95,7 @@ class _AdoptAnimalState extends State<AdoptAnimal> {
                                 ],
                               ),
                               alignment: Alignment.topLeft,
-                              child: Column(
+                              child: ListView(
                                 children: [
                                   const SizedBox(height: 5),
                                   Row(
@@ -132,10 +132,10 @@ class _AdoptAnimalState extends State<AdoptAnimal> {
                                   const SizedBox(height: 5),
                                   Wrap(
                                     alignment: WrapAlignment.spaceAround,
-                                    children: const [
-                                      Text("MACHO"),
-                                      Text("ADULTO"),
-                                      Text("MÉDIO"),
+                                    children: [
+                                      Text(snap[index]['sex']),
+                                      Text(snap[index]['age']),
+                                      Text(snap[index]['size']),
                                     ],
                                   ),
                                   const SizedBox(height: 5),
