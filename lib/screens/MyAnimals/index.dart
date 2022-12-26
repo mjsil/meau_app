@@ -17,7 +17,6 @@ class _MyAnimalsScreenState extends State<MyAnimalsScreen> {
   Widget build(BuildContext context) {
     final FirebaseAuth auth = FirebaseAuth.instance;
     final User? user = auth.currentUser;
-    final uid = user?.uid;
 
     const Color background = Color.fromARGB(255, 254, 226, 155);
     const Color fill = Colors.white;
@@ -63,8 +62,10 @@ class _MyAnimalsScreenState extends State<MyAnimalsScreen> {
         child: Column(
           children: [
             StreamBuilder<QuerySnapshot>(
-              stream:
-                  FirebaseFirestore.instance.collection("animal").snapshots(),
+              stream: FirebaseFirestore.instance
+                  .collection("animal")
+                  .where("owner", isEqualTo: user?.uid)
+                  .snapshots(),
               builder: (BuildContext context,
                   AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (snapshot.hasData) {
@@ -74,89 +75,85 @@ class _MyAnimalsScreenState extends State<MyAnimalsScreen> {
                     primary: false,
                     itemCount: snap.length,
                     itemBuilder: (context, index) {
-                      if (uid! == snap[index]['owner']) {
-                        return Center(
-                          child: Column(
-                            children: [
-                              //enter
-                              const SizedBox(height: 20),
-                              Container(
-                                width: 344,
-                                height: 264,
-                                decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                    colors: gradient,
-                                    stops: stops,
-                                    end: Alignment.bottomCenter,
-                                    begin: Alignment.topCenter,
-                                  ),
-                                  borderRadius: BorderRadius.circular(5),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black.withOpacity(0.2),
-                                      spreadRadius: -1,
-                                      blurRadius: 1,
-                                      offset: const Offset(0, 4),
-                                    ),
-                                  ],
+                      return Center(
+                        child: Column(
+                          children: [
+                            //enter
+                            const SizedBox(height: 20),
+                            Container(
+                              width: 344,
+                              height: 264,
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: gradient,
+                                  stops: stops,
+                                  end: Alignment.bottomCenter,
+                                  begin: Alignment.topCenter,
                                 ),
-                                alignment: Alignment.topLeft,
-                                child: ListView(
-                                  children: [
-                                    const SizedBox(height: 5),
-                                    Row(
-                                      children: [
-                                        const SizedBox(width: 10),
-                                        Text(snap[index]['name']),
-                                        const Spacer(),
-                                        const Icon(Icons.favorite_border),
-                                        const SizedBox(width: 10),
-                                      ],
-                                    ),
-                                    const SizedBox(height: 5),
-                                    Container(
-                                      width: 344,
-                                      height: 183,
-                                      decoration: const BoxDecoration(
-                                          image: DecorationImage(
-                                        image: AssetImage(
-                                            'assets/ImagemTeste/pet.jpeg'),
-                                        fit: BoxFit.cover,
-                                      )),
-                                      child: Material(
-                                        color: Colors.transparent,
-                                        child: InkWell(
-                                          onTap: () => Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    const AdoptFinalScreen()),
-                                          ),
+                                borderRadius: BorderRadius.circular(5),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.2),
+                                    spreadRadius: -1,
+                                    blurRadius: 1,
+                                    offset: const Offset(0, 4),
+                                  ),
+                                ],
+                              ),
+                              alignment: Alignment.topLeft,
+                              child: ListView(
+                                children: [
+                                  const SizedBox(height: 5),
+                                  Row(
+                                    children: [
+                                      const SizedBox(width: 10),
+                                      Text(snap[index]['name']),
+                                      const Spacer(),
+                                      const Icon(Icons.favorite_border),
+                                      const SizedBox(width: 10),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 5),
+                                  Container(
+                                    width: 344,
+                                    height: 183,
+                                    decoration: const BoxDecoration(
+                                        image: DecorationImage(
+                                      image: AssetImage(
+                                          'assets/ImagemTeste/pet.jpeg'),
+                                      fit: BoxFit.cover,
+                                    )),
+                                    child: Material(
+                                      color: Colors.transparent,
+                                      child: InkWell(
+                                        onTap: () => Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const AdoptFinalScreen()),
                                         ),
                                       ),
                                     ),
-                                    const SizedBox(height: 5),
-                                    Wrap(
-                                      alignment: WrapAlignment.spaceAround,
-                                      children: const [
-                                        Text("MACHO"),
-                                        Text("ADULTO"),
-                                        Text("MÉDIO"),
-                                      ],
-                                    ),
-                                    const SizedBox(height: 5),
-                                    const Center(
-                                        child: Text(
-                                            "SAMAMBAIA SUL – DISTRITO FEDERAL"))
-                                  ],
-                                ),
+                                  ),
+                                  const SizedBox(height: 5),
+                                  Wrap(
+                                    alignment: WrapAlignment.spaceAround,
+                                    children: [
+                                      Text(snap[index]['sex']),
+                                      Text(snap[index]['age']),
+                                      Text(snap[index]['size']),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 5),
+                                  const Center(
+                                      child: Text(
+                                          "SAMAMBAIA SUL – DISTRITO FEDERAL"))
+                                ],
                               ),
-                            ],
-                          ),
-                        );
-                      } else {
-                        return const SizedBox();
-                      }
+                            ),
+                          ],
+                        ),
+                      );
                     },
                   );
                 } else {
