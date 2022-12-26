@@ -49,6 +49,7 @@ class AnimalRegistry extends State<MyCustomForm> {
   String? species;
   String? sex;
   String? size;
+  String? age;
 
   //temper
   bool? playful = false;
@@ -153,7 +154,7 @@ class AnimalRegistry extends State<MyCustomForm> {
           Row(
             children: [
               Radio(
-                value: "cachorro",
+                value: "CACHORRO-",
                 groupValue: species,
                 onChanged: (value) {
                   setState(() {
@@ -163,7 +164,7 @@ class AnimalRegistry extends State<MyCustomForm> {
               ),
               const Text("Cachorro"),
               Radio(
-                value: "gato",
+                value: "GATO-",
                 groupValue: species,
                 onChanged: (value) {
                   setState(() {
@@ -181,7 +182,7 @@ class AnimalRegistry extends State<MyCustomForm> {
           Row(
             children: [
               Radio(
-                value: "Macho",
+                value: "MACHO-",
                 groupValue: sex,
                 onChanged: (value) {
                   setState(() {
@@ -191,7 +192,7 @@ class AnimalRegistry extends State<MyCustomForm> {
               ),
               const Text("Macho"),
               Radio(
-                value: "Fêmea",
+                value: "FÊMEA",
                 groupValue: sex,
                 onChanged: (value) {
                   setState(() {
@@ -202,14 +203,14 @@ class AnimalRegistry extends State<MyCustomForm> {
               const Text("Fêmea"),
             ],
           ),
-          //sex
+          //size
           const SizedBox(height: 20),
           const Text('PORTE'),
           const SizedBox(height: 20),
           Row(
             children: [
               Radio(
-                value: "Pequeno",
+                value: "PEQUENO-",
                 groupValue: size,
                 onChanged: (value) {
                   setState(() {
@@ -219,7 +220,7 @@ class AnimalRegistry extends State<MyCustomForm> {
               ),
               const Text("Pequeno"),
               Radio(
-                value: "Médio",
+                value: "MÉDIO-",
                 groupValue: size,
                 onChanged: (value) {
                   setState(() {
@@ -229,7 +230,7 @@ class AnimalRegistry extends State<MyCustomForm> {
               ),
               const Text("Médio"),
               Radio(
-                value: "Grande",
+                value: "GRANDE-",
                 groupValue: size,
                 onChanged: (value) {
                   setState(() {
@@ -238,6 +239,44 @@ class AnimalRegistry extends State<MyCustomForm> {
                 },
               ),
               const Text("Grande"),
+            ],
+          ),
+          //age
+          const SizedBox(height: 20),
+          const Text('PORTE'),
+          const SizedBox(height: 20),
+          Row(
+            children: [
+              Radio(
+                value: "FILHOTE-",
+                groupValue: age,
+                onChanged: (value) {
+                  setState(() {
+                    age = value.toString();
+                  });
+                },
+              ),
+              const Text("Filhote"),
+              Radio(
+                value: "ADULTO-",
+                groupValue: age,
+                onChanged: (value) {
+                  setState(() {
+                    age = value.toString();
+                  });
+                },
+              ),
+              const Text("Adulto"),
+              Radio(
+                value: "IDOSO-",
+                groupValue: age,
+                onChanged: (value) {
+                  setState(() {
+                    age = value.toString();
+                  });
+                },
+              ),
+              const Text("Idoso"),
             ],
           ),
 
@@ -494,6 +533,9 @@ class AnimalRegistry extends State<MyCustomForm> {
                     'objects': objectsController.text,
                     'history': historyController.text,
                     'species': species,
+                    'sex': sex,
+                    'size': size,
+                    'age': age,
                     'playful': playful,
                     'shy': shy,
                     'calm': calm,
