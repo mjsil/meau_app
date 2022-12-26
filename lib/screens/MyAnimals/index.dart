@@ -17,6 +17,8 @@ class _MyAnimalsScreenState extends State<MyAnimalsScreen> {
   Widget build(BuildContext context) {
     final FirebaseAuth auth = FirebaseAuth.instance;
     final User? user = auth.currentUser;
+    CollectionReference people =
+        FirebaseFirestore.instance.collection('people');
 
     const Color background = Color.fromARGB(255, 254, 226, 155);
     const Color fill = Colors.white;
@@ -33,7 +35,7 @@ class _MyAnimalsScreenState extends State<MyAnimalsScreen> {
       backgroundColor: const Color.fromARGB(255, 250, 250, 250),
       appBar: AppBar(
         title: const Text(
-          "Adotar",
+          "Meus Pets",
           style: TextStyle(
             color: Color.fromARGB(255, 67, 67, 67),
             fontFamily: 'Roboto',
