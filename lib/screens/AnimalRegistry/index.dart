@@ -337,9 +337,11 @@ class AnimalRegistry extends State<MyCustomForm> {
                   child: Material(
                     color: Colors.transparent,
                     child: InkWell(
-                      onTap: () {
-                        print("tapped");
-                      },
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const AddPhotoScreenAnimal()),
+                      ),
                       child: SizedBox(
                         width: 312,
                         height: 128,
