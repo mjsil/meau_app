@@ -17,10 +17,8 @@ class _MyAnimalsScreenState extends State<MyAnimalsScreen> {
   Widget build(BuildContext context) {
     final FirebaseAuth auth = FirebaseAuth.instance;
     final User? user = auth.currentUser;
-    CollectionReference people =
-        FirebaseFirestore.instance.collection('people');
 
-    const Color background = Color.fromARGB(255, 254, 226, 155);
+    const Color background = Color.fromARGB(255, 207, 233, 229);
     const Color fill = Colors.white;
     final List<Color> gradient = [
       background,
@@ -56,7 +54,7 @@ class _MyAnimalsScreenState extends State<MyAnimalsScreen> {
         systemOverlayStyle: const SystemUiOverlayStyle(
             statusBarColor: Color.fromARGB(255, 136, 201, 191)),
         iconTheme: const IconThemeData(color: Color.fromARGB(255, 67, 67, 67)),
-        backgroundColor: const Color.fromARGB(255, 255, 211, 88),
+        backgroundColor: const Color.fromARGB(255, 136, 201, 191),
         elevation: 0,
       ),
       body: SingleChildScrollView(
@@ -111,7 +109,7 @@ class _MyAnimalsScreenState extends State<MyAnimalsScreen> {
                                       const SizedBox(width: 10),
                                       Text(snap[index]['name']),
                                       const Spacer(),
-                                      const Icon(Icons.favorite_border),
+                                      const Icon(Icons.error),
                                       const SizedBox(width: 10),
                                     ],
                                   ),
@@ -138,18 +136,13 @@ class _MyAnimalsScreenState extends State<MyAnimalsScreen> {
                                     ),
                                   ),
                                   const SizedBox(height: 5),
-                                  Wrap(
-                                    alignment: WrapAlignment.spaceAround,
-                                    children: [
-                                      Text(snap[index]['sex']),
-                                      Text(snap[index]['age']),
-                                      Text(snap[index]['size']),
-                                    ],
+                                  const Center(
+                                    child: Text("3 NOVOS INTERESSADOS"),
                                   ),
                                   const SizedBox(height: 5),
                                   const Center(
-                                      child: Text(
-                                          "SAMAMBAIA SUL – DISTRITO FEDERAL"))
+                                    child: Text("APADRINHAMENTO | AJUDA"),
+                                  )
                                 ],
                               ),
                             ),
