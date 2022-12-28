@@ -48,7 +48,7 @@ class _AdoptAnimalState extends State<AdoptAnimal> {
           )
         ],
         systemOverlayStyle: const SystemUiOverlayStyle(
-            statusBarColor: Color.fromARGB(255, 136, 201, 191)),
+            statusBarColor: Color.fromARGB(255, 247, 168, 0)),
         iconTheme: const IconThemeData(color: Color.fromARGB(255, 67, 67, 67)),
         backgroundColor: const Color.fromARGB(255, 255, 211, 88),
         elevation: 0,
@@ -96,6 +96,7 @@ class _AdoptAnimalState extends State<AdoptAnimal> {
                               ),
                               alignment: Alignment.topLeft,
                               child: ListView(
+                                physics: const NeverScrollableScrollPhysics(),
                                 children: [
                                   const SizedBox(height: 5),
                                   Row(

@@ -52,7 +52,7 @@ class _MyAnimalsScreenState extends State<MyAnimalsScreen> {
           )
         ],
         systemOverlayStyle: const SystemUiOverlayStyle(
-            statusBarColor: Color.fromARGB(255, 136, 201, 191)),
+            statusBarColor: Color.fromARGB(255, 88, 155, 155)),
         iconTheme: const IconThemeData(color: Color.fromARGB(255, 67, 67, 67)),
         backgroundColor: const Color.fromARGB(255, 136, 201, 191),
         elevation: 0,
@@ -102,6 +102,7 @@ class _MyAnimalsScreenState extends State<MyAnimalsScreen> {
                               ),
                               alignment: Alignment.topLeft,
                               child: ListView(
+                                physics: const NeverScrollableScrollPhysics(),
                                 children: [
                                   const SizedBox(height: 5),
                                   Row(
