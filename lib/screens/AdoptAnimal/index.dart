@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../AdoptFinal/index.dart';
+import '../AnimalDetail/index.dart';
 
 class AdoptAnimal extends StatefulWidget {
   const AdoptAnimal({Key? key}) : super(key: key);
@@ -125,7 +125,7 @@ class _AdoptAnimalState extends State<AdoptAnimal> {
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  const AdoptFinalScreen()),
+                                                  const AnimalDetailScreen()),
                                         ),
                                       ),
                                     ),

@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../AdoptFinal/index.dart';
+import '../AnimalDetail/index.dart';
 
 class MyAnimalsScreen extends StatefulWidget {
   const MyAnimalsScreen({Key? key}) : super(key: key);
@@ -131,7 +131,7 @@ class _MyAnimalsScreenState extends State<MyAnimalsScreen> {
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  const AdoptFinalScreen()),
+                                                  const AnimalDetailScreen()),
                                         ),
                                       ),
                                     ),
