@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../AdoptAnimal/index.dart';
-import '../AllAnimals/index.dart';
 import '../AnimalRegistry/index.dart';
 import '../Login/index.dart';
 import '../MyAnimals/index.dart';
