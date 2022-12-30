@@ -101,14 +101,22 @@ class _MyAnimalsScreenState extends State<MyAnimalsScreen> {
                                 ],
                               ),
                               alignment: Alignment.topLeft,
-                              child: ListView(
-                                physics: const NeverScrollableScrollPhysics(),
+                              child: Column(
                                 children: [
                                   const SizedBox(height: 5),
                                   Row(
                                     children: [
                                       const SizedBox(width: 10),
-                                      Text(snap[index]['name']),
+                                      Text(
+                                        snap[index]['name'],
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          color:
+                                              Color.fromARGB(255, 67, 67, 67),
+                                          fontFamily: 'Roboto',
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
                                       const Spacer(),
                                       const Icon(Icons.error),
                                       const SizedBox(width: 10),
@@ -138,11 +146,27 @@ class _MyAnimalsScreenState extends State<MyAnimalsScreen> {
                                   ),
                                   const SizedBox(height: 5),
                                   const Center(
-                                    child: Text("3 NOVOS INTERESSADOS"),
+                                    child: Text(
+                                      "3 NOVOS INTERESSADOS",
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: Color.fromARGB(255, 67, 67, 67),
+                                        fontFamily: 'Roboto',
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
                                   ),
                                   const SizedBox(height: 5),
                                   const Center(
-                                    child: Text("APADRINHAMENTO | AJUDA"),
+                                    child: Text(
+                                      "APADRINHAMENTO | AJUDA",
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: Color.fromARGB(255, 67, 67, 67),
+                                        fontFamily: 'Roboto',
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
                                   )
                                 ],
                               ),
