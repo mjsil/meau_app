@@ -415,6 +415,8 @@ class AnimalRegistry extends State<MyCustomForm> {
                     child: Row(
                       children: [
                         Radio(
+                          materialTapTargetSize:
+                              MaterialTapTargetSize.shrinkWrap,
                           value: "Gato",
                           groupValue: species,
                           onChanged: (value) {
@@ -485,6 +487,8 @@ class AnimalRegistry extends State<MyCustomForm> {
                     child: Row(
                       children: [
                         Radio(
+                          materialTapTargetSize:
+                              MaterialTapTargetSize.shrinkWrap,
                           value: "FÊMEA",
                           groupValue: sex,
                           onChanged: (value) {
@@ -555,6 +559,8 @@ class AnimalRegistry extends State<MyCustomForm> {
                     child: Row(
                       children: [
                         Radio(
+                          materialTapTargetSize:
+                              MaterialTapTargetSize.shrinkWrap,
                           value: "MÉDIO",
                           groupValue: size,
                           onChanged: (value) {
@@ -580,6 +586,8 @@ class AnimalRegistry extends State<MyCustomForm> {
                     child: Row(
                       children: [
                         Radio(
+                          materialTapTargetSize:
+                              MaterialTapTargetSize.shrinkWrap,
                           value: "GRANDE",
                           groupValue: size,
                           onChanged: (value) {
@@ -650,6 +658,8 @@ class AnimalRegistry extends State<MyCustomForm> {
                     child: Row(
                       children: [
                         Radio(
+                          materialTapTargetSize:
+                              MaterialTapTargetSize.shrinkWrap,
                           value: "ADULTO",
                           groupValue: age,
                           onChanged: (value) {
@@ -675,6 +685,8 @@ class AnimalRegistry extends State<MyCustomForm> {
                     child: Row(
                       children: [
                         Radio(
+                          materialTapTargetSize:
+                              MaterialTapTargetSize.shrinkWrap,
                           value: "IDOSO",
                           groupValue: age,
                           onChanged: (value) {
@@ -743,6 +755,8 @@ class AnimalRegistry extends State<MyCustomForm> {
                     child: Row(
                       children: [
                         Checkbox(
+                          materialTapTargetSize:
+                              MaterialTapTargetSize.shrinkWrap,
                           value: shy,
                           onChanged: (bool? value) {
                             setState(() {
@@ -767,6 +781,8 @@ class AnimalRegistry extends State<MyCustomForm> {
                     child: Row(
                       children: [
                         Checkbox(
+                          materialTapTargetSize:
+                              MaterialTapTargetSize.shrinkWrap,
                           value: calm,
                           onChanged: (bool? value) {
                             setState(() {
@@ -824,6 +840,8 @@ class AnimalRegistry extends State<MyCustomForm> {
                     child: Row(
                       children: [
                         Checkbox(
+                          materialTapTargetSize:
+                              MaterialTapTargetSize.shrinkWrap,
                           value: lovable,
                           onChanged: (bool? value) {
                             setState(() {
@@ -848,6 +866,8 @@ class AnimalRegistry extends State<MyCustomForm> {
                     child: Row(
                       children: [
                         Checkbox(
+                          materialTapTargetSize:
+                              MaterialTapTargetSize.shrinkWrap,
                           value: lazy,
                           onChanged: (bool? value) {
                             setState(() {
@@ -916,6 +936,8 @@ class AnimalRegistry extends State<MyCustomForm> {
                     child: Row(
                       children: [
                         Checkbox(
+                          materialTapTargetSize:
+                              MaterialTapTargetSize.shrinkWrap,
                           value: dewormed,
                           onChanged: (bool? value) {
                             setState(() {
@@ -973,6 +995,8 @@ class AnimalRegistry extends State<MyCustomForm> {
                     child: Row(
                       children: [
                         Checkbox(
+                          materialTapTargetSize:
+                              MaterialTapTargetSize.shrinkWrap,
                           value: sick,
                           onChanged: (bool? value) {
                             setState(() {
