@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/user/index.dart';
@@ -14,13 +15,14 @@ class AnimalRegistryScreen extends StatelessWidget {
     final authService = Provider.of<AuthService>(context);
 
     return StreamBuilder<User?>(
-      stream: authService.user,
-      builder: (_, AsyncSnapshot<User?> snapshot) {
-        final User? user = snapshot.data;
-        
-        return MyCustomForm(uid: user?.uid,);
-      } 
-    );
+        stream: authService.user,
+        builder: (_, AsyncSnapshot<User?> snapshot) {
+          final User? user = snapshot.data;
+
+          return MyCustomForm(
+            uid: user?.uid,
+          );
+        });
   }
 }
 
@@ -38,14 +40,15 @@ class MyCustomForm extends StatefulWidget {
 class AnimalRegistry extends State<MyCustomForm> {
   //Instancia Firestore
   FirebaseFirestore db = FirebaseFirestore.instance;
-  
+
   final TextEditingController nameController = TextEditingController();
   final TextEditingController sicknessController = TextEditingController();
-  final TextEditingController prescriptionController = TextEditingController();
-  final TextEditingController objectsController = TextEditingController();
   final TextEditingController historyController = TextEditingController();
 
   String? species;
+  String? sex;
+  String? size;
+  String? age;
 
   //temper
   bool? playful = false;
@@ -61,13 +64,10 @@ class AnimalRegistry extends State<MyCustomForm> {
   bool? castrated = false;
   bool? sick = false;
 
-  //animal needs
-  bool? foodHelp = false;
-  bool? moneyHelp = false;
-  bool? medicationHelp = false;
-
-  //objects
-  bool? object = false;
+  //adoption requirement
+  bool? adoptionTerm = false;
+  bool? housePicture = false;
+  bool? previousVisit = false;
 
   @override
   void initState() {
@@ -87,378 +87,1183 @@ class AnimalRegistry extends State<MyCustomForm> {
             fontWeight: FontWeight.w500,
           ),
         ),
+        systemOverlayStyle: const SystemUiOverlayStyle(
+            statusBarColor: Color.fromARGB(255, 247, 168, 0)),
+        iconTheme: const IconThemeData(color: Color.fromARGB(255, 67, 67, 67)),
+        backgroundColor: const Color.fromARGB(255, 255, 211, 88),
+        elevation: 0,
       ),
-      body: Container(
-        padding: const EdgeInsets.all(16),
-        child: ListView(
-          children: <Widget>[
-            //Nome do animal Text Field
-            const SizedBox(height: 20),
-            const Text('NOME DO ANIMAL'),
-            const SizedBox(height: 20),
-            TextFormField(
-              controller: nameController,
-              keyboardType: TextInputType.text,
-              decoration: const InputDecoration(
-                  hintText: "Nome do animal",
-                  contentPadding: EdgeInsets.all(8),
-                  labelStyle: TextStyle(
-                    color: Colors.black,
+      body: ListView(
+          padding: const EdgeInsetsDirectional.only(start: 24, end: 24),
+          children: [
+            const SizedBox(height: 15),
+            Row(
+              children: const [
+                Text(
+                  "Tenho interesse em cadastrar o animal para:",
+                  style: TextStyle(
                     fontSize: 14,
-                  )),
+                    fontFamily: 'Roboto',
+                    fontWeight: FontWeight.w400,
+                    color: Color.fromARGB(255, 67, 67, 67),
+                  ),
+                ),
+              ],
             ),
-
-            //add image container
-            const SizedBox(height: 20),
-            const Text('FOTOS DO ANIMAL'),
-            const SizedBox(height: 20),
-            Container(
-              height: 150,
-              width: 380,
-              decoration: BoxDecoration(
-                color: const Color(0xfff1f2f2),
-                borderRadius: BorderRadius.circular(15),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  IconButton(
-                      onPressed: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    const AddPhotoScreenAnimal()),
+            const SizedBox(height: 15),
+            //BOTÃO ADOÇÃO
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Wrap(
+                  spacing: 8,
+                  children: [
+                    //ADOÇÃO
+                    Container(
+                      alignment: Alignment.center,
+                      width: 100,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: const Color.fromARGB(255, 255, 211, 88),
+                        borderRadius: BorderRadius.circular(2),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.2),
+                            spreadRadius: -1,
+                            blurRadius: 1,
+                            offset: const Offset(0, 3),
                           ),
-                      icon: const Icon(Icons.control_point,
-                          color: Color(0Xff434343))),
-                  const Text(
-                    "Adicionar fotos",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: Color(0Xff434343)),
+                        ],
+                      ),
+                      child: Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          onTap: () {
+                            print("tapped");
+                          },
+                          child: const SizedBox(
+                            width: 100,
+                            height: 40,
+                            child: Center(
+                              child: Text(
+                                "ADOÇÃO",
+                                style: TextStyle(
+                                  fontSize: 12.0,
+                                  fontFamily: 'Roboto',
+                                  fontWeight: FontWeight.w400,
+                                  color: Color.fromARGB(255, 67, 67, 67),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    //APADRINHAR
+                    Container(
+                      alignment: Alignment.center,
+                      width: 100,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: const Color.fromARGB(255, 241, 242, 242),
+                        borderRadius: BorderRadius.circular(2),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.2),
+                            spreadRadius: -1,
+                            blurRadius: 1,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      child: Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          onTap: () {
+                            print("tapped");
+                          },
+                          child: const SizedBox(
+                            width: 100,
+                            height: 40,
+                            child: Center(
+                              child: Text(
+                                "APADRINHAR",
+                                style: TextStyle(
+                                  fontSize: 12.0,
+                                  fontFamily: 'Roboto',
+                                  fontWeight: FontWeight.w400,
+                                  color: Color.fromARGB(255, 67, 67, 67),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    //AJUDA
+                    Container(
+                      alignment: Alignment.center,
+                      width: 100,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: const Color.fromARGB(255, 241, 242, 242),
+                        borderRadius: BorderRadius.circular(2),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.2),
+                            spreadRadius: -1,
+                            blurRadius: 1,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      child: Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          onTap: () {
+                            print("tapped");
+                          },
+                          child: const SizedBox(
+                            width: 100,
+                            height: 40,
+                            child: Center(
+                              child: Text(
+                                "AJUDA",
+                                style: TextStyle(
+                                  fontSize: 12.0,
+                                  fontFamily: 'Roboto',
+                                  fontWeight: FontWeight.w400,
+                                  color: Color.fromARGB(255, 67, 67, 67),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+            const Divider(height: 1, thickness: 0.3),
+            const SizedBox(height: 16),
+            const Text(
+              "Adoção",
+              style: TextStyle(
+                fontSize: 16,
+                fontFamily: 'Roboto',
+                fontWeight: FontWeight.w500,
+                color: Color.fromARGB(255, 67, 67, 67),
+              ),
+            ),
+            //NOME DO ANIMAL
+            const SizedBox(height: 20),
+            const Text(
+              "NOME DO ANIMAL",
+              style: TextStyle(
+                fontSize: 12,
+                fontFamily: 'Roboto',
+                fontWeight: FontWeight.w400,
+                color: Color.fromARGB(255, 247, 168, 0),
+              ),
+            ),
+            const SizedBox(height: 20),
+            SizedBox(
+              width: 312,
+              child: TextFormField(
+                controller: nameController,
+                cursorWidth: 1,
+                cursorColor: const Color.fromARGB(255, 247, 168, 0),
+                style: const TextStyle(
+                  color: Color.fromARGB(255, 189, 189, 189),
+                  fontSize: 14,
+                  fontFamily: 'Roboto',
+                  fontWeight: FontWeight.w400,
+                ),
+                keyboardType: TextInputType.text,
+                decoration: const InputDecoration(
+                  isDense: true,
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: 0,
+                    vertical: 8,
+                  ),
+                  hintStyle: TextStyle(
+                    color: Color.fromARGB(255, 230, 231, 232),
+                    fontSize: 14,
+                    fontFamily: 'Roboto',
+                    fontWeight: FontWeight.w400,
+                  ),
+                  enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                    color: Color.fromARGB(255, 230, 231, 232),
+                  )),
+                  focusedBorder: UnderlineInputBorder(
+                      borderSide:
+                          BorderSide(color: Color.fromARGB(255, 247, 168, 0))),
+                  hintText: "Nome do animal",
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              "FOTOS DO ANIMAL",
+              style: TextStyle(
+                fontSize: 12,
+                fontFamily: 'Roboto',
+                fontWeight: FontWeight.w400,
+                color: Color.fromARGB(255, 247, 168, 0),
+              ),
+            ),
+            const SizedBox(height: 20),
+            Column(
+              children: [
+                Container(
+                  alignment: Alignment.center,
+                  width: 312,
+                  height: 128,
+                  decoration: BoxDecoration(
+                    color: const Color.fromARGB(255, 241, 242, 242),
+                    borderRadius: BorderRadius.circular(2),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        spreadRadius: -1,
+                        blurRadius: 1,
+                        offset: const Offset(0, 3),
+                      ),
+                    ],
+                  ),
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const AddPhotoScreenAnimal()),
+                      ),
+                      child: SizedBox(
+                        width: 312,
+                        height: 128,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            SizedBox(height: 44),
+                            Icon(Icons.control_point),
+                            Text(
+                              "adicionar fotos",
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontFamily: 'Roboto',
+                                fontWeight: FontWeight.w400,
+                                color: Color.fromARGB(255, 67, 67, 67),
+                              ),
+                            ),
+                            SizedBox(height: 44),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            //ESPÉCIE
+            const SizedBox(height: 20),
+            const Text(
+              "ESPÉCIE",
+              style: TextStyle(
+                fontSize: 12,
+                fontFamily: 'Roboto',
+                fontWeight: FontWeight.w400,
+                color: Color.fromARGB(255, 247, 168, 0),
+              ),
+            ),
+            const SizedBox(height: 16),
+            Theme(
+              data: ThemeData(
+                primarySwatch: Colors.amber,
+                unselectedWidgetColor: const Color.fromARGB(255, 117, 117, 117),
+              ),
+              child: Stack(
+                children: [
+                  Row(
+                    children: [
+                      Radio(
+                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        value: "Cachorro",
+                        groupValue: species,
+                        onChanged: (value) {
+                          setState(() {
+                            species = value.toString();
+                          });
+                        },
+                      ),
+                      const Text(
+                        "Cachorro",
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontFamily: 'Roboto',
+                          fontWeight: FontWeight.w400,
+                          color: Color.fromARGB(255, 117, 117, 117),
+                        ),
+                      )
+                    ],
+                  ),
+                  Positioned(
+                    left: 124,
+                    child: Row(
+                      children: [
+                        Radio(
+                          value: "Gato",
+                          groupValue: species,
+                          onChanged: (value) {
+                            setState(() {
+                              species = value.toString();
+                            });
+                          },
+                        ),
+                        const Text(
+                          "Gato",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontFamily: 'Roboto',
+                            fontWeight: FontWeight.w400,
+                            color: Color.fromARGB(255, 117, 117, 117),
+                          ),
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
+            //SEXO
+            const SizedBox(height: 20),
+            const Text(
+              "SEXO",
+              style: TextStyle(
+                fontSize: 12,
+                fontFamily: 'Roboto',
+                fontWeight: FontWeight.w400,
+                color: Color.fromARGB(255, 247, 168, 0),
+              ),
+            ),
+            const SizedBox(height: 16),
+            Theme(
+              data: ThemeData(
+                primarySwatch: Colors.amber,
+                unselectedWidgetColor: const Color.fromARGB(255, 117, 117, 117),
+              ),
+              child: Stack(
+                children: [
+                  Row(
+                    children: [
+                      Radio(
+                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        value: "MACHO",
+                        groupValue: sex,
+                        onChanged: (value) {
+                          setState(() {
+                            sex = value.toString();
+                          });
+                        },
+                      ),
+                      const Text(
+                        "Macho",
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontFamily: 'Roboto',
+                          fontWeight: FontWeight.w400,
+                          color: Color.fromARGB(255, 117, 117, 117),
+                        ),
+                      )
+                    ],
+                  ),
+                  Positioned(
+                    left: 124,
+                    child: Row(
+                      children: [
+                        Radio(
+                          value: "FÊMEA",
+                          groupValue: sex,
+                          onChanged: (value) {
+                            setState(() {
+                              sex = value.toString();
+                            });
+                          },
+                        ),
+                        const Text(
+                          "Fêmea",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontFamily: 'Roboto',
+                            fontWeight: FontWeight.w400,
+                            color: Color.fromARGB(255, 117, 117, 117),
+                          ),
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
+            //PORTE
+            const SizedBox(height: 20),
+            const Text(
+              "PORTE",
+              style: TextStyle(
+                fontSize: 12,
+                fontFamily: 'Roboto',
+                fontWeight: FontWeight.w400,
+                color: Color.fromARGB(255, 247, 168, 0),
+              ),
+            ),
+            const SizedBox(height: 16),
+            Theme(
+              data: ThemeData(
+                primarySwatch: Colors.amber,
+                unselectedWidgetColor: const Color.fromARGB(255, 117, 117, 117),
+              ),
+              child: Stack(
+                children: [
+                  Row(
+                    children: [
+                      Radio(
+                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        value: "PEQUENO",
+                        groupValue: size,
+                        onChanged: (value) {
+                          setState(() {
+                            size = value.toString();
+                          });
+                        },
+                      ),
+                      const Text(
+                        "Pequeno",
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontFamily: 'Roboto',
+                          fontWeight: FontWeight.w400,
+                          color: Color.fromARGB(255, 117, 117, 117),
+                        ),
+                      )
+                    ],
+                  ),
+                  Positioned(
+                    left: 124,
+                    child: Row(
+                      children: [
+                        Radio(
+                          value: "MÉDIO",
+                          groupValue: size,
+                          onChanged: (value) {
+                            setState(() {
+                              size = value.toString();
+                            });
+                          },
+                        ),
+                        const Text(
+                          "Médio",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontFamily: 'Roboto',
+                            fontWeight: FontWeight.w400,
+                            color: Color.fromARGB(255, 117, 117, 117),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  Positioned(
+                    left: 220,
+                    child: Row(
+                      children: [
+                        Radio(
+                          value: "GRANDE",
+                          groupValue: size,
+                          onChanged: (value) {
+                            setState(() {
+                              size = value.toString();
+                            });
+                          },
+                        ),
+                        const Text(
+                          "Grande",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontFamily: 'Roboto',
+                            fontWeight: FontWeight.w400,
+                            color: Color.fromARGB(255, 117, 117, 117),
+                          ),
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
+            //IDADE
+            const SizedBox(height: 20),
+            const Text(
+              "IDADE",
+              style: TextStyle(
+                fontSize: 12,
+                fontFamily: 'Roboto',
+                fontWeight: FontWeight.w400,
+                color: Color.fromARGB(255, 247, 168, 0),
+              ),
+            ),
+            const SizedBox(height: 16),
+            Theme(
+              data: ThemeData(
+                primarySwatch: Colors.amber,
+                unselectedWidgetColor: const Color.fromARGB(255, 117, 117, 117),
+              ),
+              child: Stack(
+                children: [
+                  Row(
+                    children: [
+                      Radio(
+                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        value: "FILHOTE",
+                        groupValue: age,
+                        onChanged: (value) {
+                          setState(() {
+                            age = value.toString();
+                          });
+                        },
+                      ),
+                      const Text(
+                        "Filhote",
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontFamily: 'Roboto',
+                          fontWeight: FontWeight.w400,
+                          color: Color.fromARGB(255, 117, 117, 117),
+                        ),
+                      )
+                    ],
+                  ),
+                  Positioned(
+                    left: 124,
+                    child: Row(
+                      children: [
+                        Radio(
+                          value: "ADULTO",
+                          groupValue: age,
+                          onChanged: (value) {
+                            setState(() {
+                              age = value.toString();
+                            });
+                          },
+                        ),
+                        const Text(
+                          "Adulto",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontFamily: 'Roboto',
+                            fontWeight: FontWeight.w400,
+                            color: Color.fromARGB(255, 117, 117, 117),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  Positioned(
+                    left: 220,
+                    child: Row(
+                      children: [
+                        Radio(
+                          value: "IDOSO",
+                          groupValue: age,
+                          onChanged: (value) {
+                            setState(() {
+                              age = value.toString();
+                            });
+                          },
+                        ),
+                        const Text(
+                          "Idoso",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontFamily: 'Roboto',
+                            fontWeight: FontWeight.w400,
+                            color: Color.fromARGB(255, 117, 117, 117),
+                          ),
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              "TEMPERAMENTO",
+              style: TextStyle(
+                fontSize: 12,
+                fontFamily: 'Roboto',
+                fontWeight: FontWeight.w400,
+                color: Color.fromARGB(255, 247, 168, 0),
+              ),
+            ),
+            const SizedBox(height: 16),
+            Theme(
+              data: ThemeData(
+                primarySwatch: Colors.amber,
+                unselectedWidgetColor: const Color.fromARGB(255, 117, 117, 117),
+              ),
+              child: Stack(
+                children: [
+                  Row(
+                    children: [
+                      Checkbox(
+                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        value: playful,
+                        onChanged: (bool? value) {
+                          setState(() {
+                            playful = value;
+                          });
+                        },
+                      ),
+                      const Text(
+                        "Brincalhão",
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontFamily: 'Roboto',
+                          fontWeight: FontWeight.w400,
+                          color: Color.fromARGB(255, 117, 117, 117),
+                        ),
+                      )
+                    ],
+                  ),
+                  Positioned(
+                    left: 124,
+                    child: Row(
+                      children: [
+                        Checkbox(
+                          value: shy,
+                          onChanged: (bool? value) {
+                            setState(() {
+                              shy = value;
+                            });
+                          },
+                        ),
+                        const Text(
+                          "Tímido",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontFamily: 'Roboto',
+                            fontWeight: FontWeight.w400,
+                            color: Color.fromARGB(255, 117, 117, 117),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  Positioned(
+                    left: 220,
+                    child: Row(
+                      children: [
+                        Checkbox(
+                          value: calm,
+                          onChanged: (bool? value) {
+                            setState(() {
+                              calm = value;
+                            });
+                          },
+                        ),
+                        const Text(
+                          "Calmo",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontFamily: 'Roboto',
+                            fontWeight: FontWeight.w400,
+                            color: Color.fromARGB(255, 117, 117, 117),
+                          ),
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
+            const SizedBox(height: 28),
+            Theme(
+              data: ThemeData(
+                primarySwatch: Colors.amber,
+                unselectedWidgetColor: const Color.fromARGB(255, 117, 117, 117),
+              ),
+              child: Stack(
+                children: [
+                  Row(
+                    children: [
+                      Checkbox(
+                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        value: watchDog,
+                        onChanged: (bool? value) {
+                          setState(() {
+                            watchDog = value;
+                          });
+                        },
+                      ),
+                      const Text(
+                        "Guarda",
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontFamily: 'Roboto',
+                          fontWeight: FontWeight.w400,
+                          color: Color.fromARGB(255, 117, 117, 117),
+                        ),
+                      )
+                    ],
+                  ),
+                  Positioned(
+                    left: 124,
+                    child: Row(
+                      children: [
+                        Checkbox(
+                          value: lovable,
+                          onChanged: (bool? value) {
+                            setState(() {
+                              lovable = value;
+                            });
+                          },
+                        ),
+                        const Text(
+                          "Amoroso",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontFamily: 'Roboto',
+                            fontWeight: FontWeight.w400,
+                            color: Color.fromARGB(255, 117, 117, 117),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  Positioned(
+                    left: 220,
+                    child: Row(
+                      children: [
+                        Checkbox(
+                          value: lazy,
+                          onChanged: (bool? value) {
+                            setState(() {
+                              lazy = value;
+                            });
+                          },
+                        ),
+                        const Text(
+                          "Preguiçoso",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontFamily: 'Roboto',
+                            fontWeight: FontWeight.w400,
+                            color: Color.fromARGB(255, 117, 117, 117),
+                          ),
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
+            //aqui------------------------------------------------------------INICIO
+            const SizedBox(height: 20),
+            const Text(
+              "SAÚDE",
+              style: TextStyle(
+                fontSize: 12,
+                fontFamily: 'Roboto',
+                fontWeight: FontWeight.w400,
+                color: Color.fromARGB(255, 247, 168, 0),
+              ),
+            ),
+            const SizedBox(height: 16),
+            Theme(
+              data: ThemeData(
+                primarySwatch: Colors.amber,
+                unselectedWidgetColor: const Color.fromARGB(255, 117, 117, 117),
+              ),
+              child: Stack(
+                children: [
+                  Row(
+                    children: [
+                      Checkbox(
+                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        value: vaccinated,
+                        onChanged: (bool? value) {
+                          setState(() {
+                            vaccinated = value;
+                          });
+                        },
+                      ),
+                      const Text(
+                        "Vacinado",
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontFamily: 'Roboto',
+                          fontWeight: FontWeight.w400,
+                          color: Color.fromARGB(255, 117, 117, 117),
+                        ),
+                      )
+                    ],
+                  ),
+                  Positioned(
+                    left: 124,
+                    child: Row(
+                      children: [
+                        Checkbox(
+                          value: dewormed,
+                          onChanged: (bool? value) {
+                            setState(() {
+                              dewormed = value;
+                            });
+                          },
+                        ),
+                        const Text(
+                          "Vermifugado",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontFamily: 'Roboto',
+                            fontWeight: FontWeight.w400,
+                            color: Color.fromARGB(255, 117, 117, 117),
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ],
               ),
             ),
-            Container(
-              alignment: Alignment.topLeft,
-              padding: const EdgeInsets.only(left: 15),
-            ),
-
-            //species
-            const SizedBox(height: 20),
-            const Text('ESPÉCIE'),
-            const SizedBox(height: 20),
-            Row(
-              children: [
-                Radio(
-                  value: "cachorro",
-                  groupValue: species,
-                  onChanged: (value) {
-                    setState(() {
-                      species = value.toString();
-                    });
-                  },
-                ),
-                const Text("Cachorro"),
-                Radio(
-                  value: "gato",
-                  groupValue: species,
-                  onChanged: (value) {
-                    setState(() {
-                      species = value.toString();
-                    });
-                  },
-                ),
-                const Text("Gato"),
-              ],
-            ),
-
-            //temper 1
-            const SizedBox(height: 20),
-            const Text('TEMPERAMENTO'),
-            const SizedBox(height: 20),
-            Row(
-              children: [
-                Checkbox(
-                  value: playful,
-                  onChanged: (bool? value) {
-                    setState(() {
-                      playful = value;
-                    });
-                  },
-                ),
-                const Text("Brincalhão"),
-                Checkbox(
-                  value: shy,
-                  onChanged: (bool? value) {
-                    setState(() {
-                      shy = value;
-                    });
-                  },
-                ),
-                const Text("Tímido"),
-                Checkbox(
-                  value: calm,
-                  onChanged: (bool? value) {
-                    setState(() {
-                      calm = value;
-                    });
-                  },
-                ),
-                const Text("Calmo"),
-              ],
-            ),
-            const SizedBox(height: 20),
-            //temper 2
-            Row(
-              children: [
-                Checkbox(
-                  value: watchDog,
-                  onChanged: (bool? value) {
-                    setState(() {
-                      watchDog = value;
-                    });
-                  },
-                ),
-                const Text("Guarda"),
-                Checkbox(
-                  value: lovable,
-                  onChanged: (bool? value) {
-                    setState(() {
-                      lovable = value;
-                    });
-                  },
-                ),
-                const Text("Amoroso"),
-                Checkbox(
-                  value: lazy,
-                  onChanged: (bool? value) {
-                    setState(() {
-                      lazy = value;
-                    });
-                  },
-                ),
-                const Text("Preguiçoso"),
-              ],
-            ),
-            //health 1
-
-            const SizedBox(height: 20),
-            const Text('SAÚDE'),
-            const SizedBox(height: 20),
-            Row(
-              children: [
-                Checkbox(
-                  value: vaccinated,
-                  onChanged: (bool? value) {
-                    setState(() {
-                      vaccinated = value;
-                    });
-                  },
-                ),
-                const Text("Vacinado"),
-                Checkbox(
-                  value: dewormed,
-                  onChanged: (bool? value) {
-                    setState(() {
-                      dewormed = value;
-                    });
-                  },
-                ),
-                const Text("Vermifugado"),
-              ],
-            ),
-            const SizedBox(height: 20),
-            //health 2
-            Row(
-              children: [
-                Checkbox(
-                  value: castrated,
-                  onChanged: (bool? value) {
-                    setState(() {
-                      castrated = value;
-                    });
-                  },
-                ),
-                const Text("Castrado"),
-                Checkbox(
-                  value: sick,
-                  onChanged: (bool? value) {
-                    setState(() {
-                      sick = value;
-                    });
-                  },
-                ),
-                const Text("Doente"),
-              ],
-            ),
-            TextFormField(
-              controller: sicknessController,
-              keyboardType: TextInputType.text,
-              decoration: const InputDecoration(
-                  hintText: "Doenças do animal",
-                  contentPadding: EdgeInsets.all(8),
-                  labelStyle: TextStyle(
-                    color: Colors.black,
-                    fontSize: 14,
-                  )),
-            ),
-            //animal needs
-            const SizedBox(height: 20),
-            const Text('NECESSIDADES DO ANIMAL'),
-            const SizedBox(height: 20),
-
-            //foodHelp
-            Row(
-              children: [
-                Checkbox(
-                  value: foodHelp,
-                  onChanged: (bool? value) {
-                    setState(() {
-                      foodHelp = value;
-                    });
-                  },
-                ),
-                const Text("Alimento"),
-              ],
-            ),
-
-            //moneyHelp
-            Row(
-              children: [
-                Checkbox(
-                  value: moneyHelp,
-                  onChanged: (bool? value) {
-                    setState(() {
-                      moneyHelp = value;
-                    });
-                  },
-                ),
-                const Text("Auxílio financeiro"),
-              ],
-            ),
-            //medicationHelp
-            Row(
-              children: [
-                Checkbox(
-                  value: medicationHelp,
-                  onChanged: (bool? value) {
-                    setState(() {
-                      medicationHelp = value;
-                    });
-                  },
-                ),
-                const Text("Medicamento"),
-              ],
-            ),
-            //prescription
-            TextFormField(
-              controller: prescriptionController,
-              keyboardType: TextInputType.text,
-              decoration: const InputDecoration(
-                  hintText: "Nome do medicamento",
-                  contentPadding: EdgeInsets.all(8),
-                  labelStyle: TextStyle(
-                    color: Colors.black,
-                    fontSize: 14,
-                  )),
-            ),
-            //objects
-            Row(
-              children: [
-                Checkbox(
-                  value: object,
-                  onChanged: (bool? value) {
-                    setState(() {
-                      object = value;
-                    });
-                  },
-                ),
-                const Text("Objetos"),
-              ],
-            ),
-            //text field object
-            TextFormField(
-              controller: objectsController,
-              keyboardType: TextInputType.text,
-              decoration: const InputDecoration(
-                  hintText: "Especifique o(s) objetos(s)",
-                  contentPadding: EdgeInsets.all(8),
-                  labelStyle: TextStyle(
-                    color: Colors.black,
-                    fontSize: 14,
-                  )),
-            ),
-            //animal history
-            const SizedBox(height: 20),
-            const Text('SOBRE O ANIMAL'),
-            const SizedBox(height: 20),
-            TextFormField(
-              controller: historyController,
-              keyboardType: TextInputType.text,
-              decoration: const InputDecoration(
-                  hintText: "Compartilher a história do animal",
-                  contentPadding: EdgeInsets.all(8),
-                  labelStyle: TextStyle(
-                    color: Colors.black,
-                    fontSize: 14,
-                  )),
-            ),
-            //register animal button
-            const SizedBox(height: 52),
-            SizedBox(
-              width: 232,
-              height: 40,
-              child: TextButton(
-                style: TextButton.styleFrom(
-                  backgroundColor: Colors.black,
-                  textStyle: const TextStyle(
-                    fontSize: 12,
+            const SizedBox(height: 28),
+            Theme(
+              data: ThemeData(
+                primarySwatch: Colors.amber,
+                unselectedWidgetColor: const Color.fromARGB(255, 117, 117, 117),
+              ),
+              child: Stack(
+                children: [
+                  Row(
+                    children: [
+                      Checkbox(
+                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        value: castrated,
+                        onChanged: (bool? value) {
+                          setState(() {
+                            castrated = value;
+                          });
+                        },
+                      ),
+                      const Text(
+                        "Castrado",
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontFamily: 'Roboto',
+                          fontWeight: FontWeight.w400,
+                          color: Color.fromARGB(255, 117, 117, 117),
+                        ),
+                      )
+                    ],
                   ),
-                ),
-                onPressed: () async {
-                  try {
-                    await db.collection('animal')
-                      .doc()
-                      .set({
-                        'owner': widget.uid,
-                        'name': nameController.text,
-                        'sickness': sicknessController.text,
-                        'prescription': prescriptionController.text,
-                        'objects': objectsController.text,
-                        'history': historyController.text,
-                        'species': species,
-                        'playful': playful,
-                        'shy': shy,
-                        'calm': calm,
-                        'watchDog': watchDog,
-                        'lovable': lovable,
-                        'lazy': lazy,
-                        'vaccinated': vaccinated,
-                        'dewormed': dewormed,
-                        'castrated': castrated,
-                        'sick': sick,
-                        'foodHelp': foodHelp,
-                        'moneyHelp': moneyHelp,
-                        'medicationHelp': medicationHelp,
-                        'object': object,
-                      });
-
-                    // ignore: use_build_context_synchronously
-                    Navigator.of(context).pushNamed("/home");
-                  } catch(error) {
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                      content: Text('Animal não cadastrado!'),
-                    ));
-                  } 
-                  
-                },
-                child: const Text("CADASTRAR"),
+                  Positioned(
+                    left: 124,
+                    child: Row(
+                      children: [
+                        Checkbox(
+                          value: sick,
+                          onChanged: (bool? value) {
+                            setState(() {
+                              sick = value;
+                            });
+                          },
+                        ),
+                        const Text(
+                          "Doente",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontFamily: 'Roboto',
+                            fontWeight: FontWeight.w400,
+                            color: Color.fromARGB(255, 117, 117, 117),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
-          ]
-        ),
-      ),
+            const SizedBox(height: 20),
+            SizedBox(
+              width: 312,
+              child: TextFormField(
+                controller: sicknessController,
+                cursorWidth: 1,
+                cursorColor: const Color.fromARGB(255, 247, 168, 0),
+                style: const TextStyle(
+                  color: Color.fromARGB(255, 189, 189, 189),
+                  fontSize: 14,
+                  fontFamily: 'Roboto',
+                  fontWeight: FontWeight.w400,
+                ),
+                keyboardType: TextInputType.text,
+                decoration: const InputDecoration(
+                  isDense: true,
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: 0,
+                    vertical: 8,
+                  ),
+                  hintStyle: TextStyle(
+                    color: Color.fromARGB(255, 230, 231, 232),
+                    fontSize: 14,
+                    fontFamily: 'Roboto',
+                    fontWeight: FontWeight.w400,
+                  ),
+                  enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                    color: Color.fromARGB(255, 230, 231, 232),
+                  )),
+                  focusedBorder: UnderlineInputBorder(
+                      borderSide:
+                          BorderSide(color: Color.fromARGB(255, 247, 168, 0))),
+                  hintText: "Doenças do animal",
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              "EXIGÊNCIAS PARA ADOÇÃO",
+              style: TextStyle(
+                fontSize: 12,
+                fontFamily: 'Roboto',
+                fontWeight: FontWeight.w400,
+                color: Color.fromARGB(255, 247, 168, 0),
+              ),
+            ),
+            const SizedBox(height: 16),
+            Theme(
+              data: ThemeData(
+                primarySwatch: Colors.amber,
+                unselectedWidgetColor: const Color.fromARGB(255, 117, 117, 117),
+              ),
+              child: Stack(
+                children: [
+                  Row(
+                    children: [
+                      Checkbox(
+                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        value: adoptionTerm,
+                        onChanged: (bool? value) {
+                          setState(() {
+                            adoptionTerm = value;
+                          });
+                        },
+                      ),
+                      const Text(
+                        "Termo de adoção",
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontFamily: 'Roboto',
+                          fontWeight: FontWeight.w400,
+                          color: Color.fromARGB(255, 117, 117, 117),
+                        ),
+                      )
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 28),
+            Theme(
+              data: ThemeData(
+                primarySwatch: Colors.amber,
+                unselectedWidgetColor: const Color.fromARGB(255, 117, 117, 117),
+              ),
+              child: Stack(
+                children: [
+                  Row(
+                    children: [
+                      Checkbox(
+                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        value: housePicture,
+                        onChanged: (bool? value) {
+                          setState(() {
+                            housePicture = value;
+                          });
+                        },
+                      ),
+                      const Text(
+                        "Fotos da casa",
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontFamily: 'Roboto',
+                          fontWeight: FontWeight.w400,
+                          color: Color.fromARGB(255, 117, 117, 117),
+                        ),
+                      )
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 28),
+            Theme(
+              data: ThemeData(
+                primarySwatch: Colors.amber,
+                unselectedWidgetColor: const Color.fromARGB(255, 117, 117, 117),
+              ),
+              child: Stack(
+                children: [
+                  Row(
+                    children: [
+                      Checkbox(
+                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        value: previousVisit,
+                        onChanged: (bool? value) {
+                          setState(() {
+                            previousVisit = value;
+                          });
+                        },
+                      ),
+                      const Text(
+                        "Visita prévia ao animal",
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontFamily: 'Roboto',
+                          fontWeight: FontWeight.w400,
+                          color: Color.fromARGB(255, 117, 117, 117),
+                        ),
+                      )
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 28),
+            const Text(
+              "SOBRE O ANIMAL",
+              style: TextStyle(
+                fontSize: 12,
+                fontFamily: 'Roboto',
+                fontWeight: FontWeight.w400,
+                color: Color.fromARGB(255, 247, 168, 0),
+              ),
+            ),
+            const SizedBox(height: 20),
+            SizedBox(
+              width: 312,
+              child: TextFormField(
+                controller: historyController,
+                cursorWidth: 1,
+                cursorColor: const Color.fromARGB(255, 247, 168, 0),
+                style: const TextStyle(
+                  color: Color.fromARGB(255, 189, 189, 189),
+                  fontSize: 14,
+                  fontFamily: 'Roboto',
+                  fontWeight: FontWeight.w400,
+                ),
+                keyboardType: TextInputType.text,
+                decoration: const InputDecoration(
+                  isDense: true,
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: 0,
+                    vertical: 8,
+                  ),
+                  hintStyle: TextStyle(
+                    color: Color.fromARGB(255, 230, 231, 232),
+                    fontSize: 14,
+                    fontFamily: 'Roboto',
+                    fontWeight: FontWeight.w400,
+                  ),
+                  enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                    color: Color.fromARGB(255, 230, 231, 232),
+                  )),
+                  focusedBorder: UnderlineInputBorder(
+                      borderSide:
+                          BorderSide(color: Color.fromARGB(255, 247, 168, 0))),
+                  hintText: "Compartilhe a história do animal",
+                ),
+              ),
+            ),
+            const SizedBox(height: 24),
+            Column(
+              children: [
+                Container(
+                  alignment: Alignment.center,
+                  width: 232,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: const Color.fromARGB(255, 255, 211, 88),
+                    borderRadius: BorderRadius.circular(2),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        spreadRadius: -1,
+                        blurRadius: 1,
+                        offset: const Offset(0, 3),
+                      ),
+                    ],
+                  ),
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      onTap: () async {
+                        try {
+                          await db.collection('animal').doc().set({
+                            'owner': widget.uid,
+                            'name': nameController.text,
+                            'sickness': sicknessController.text,
+                            'history': historyController.text,
+                            'species': species,
+                            'sex': sex,
+                            'size': size,
+                            'age': age,
+                            'playful': playful,
+                            'shy': shy,
+                            'calm': calm,
+                            'watchDog': watchDog,
+                            'lovable': lovable,
+                            'lazy': lazy,
+                            'vaccinated': vaccinated,
+                            'dewormed': dewormed,
+                            'castrated': castrated,
+                            'sick': sick,
+                          });
+
+                          // ignore: use_build_context_synchronously
+                          Navigator.of(context).pushNamed("/home");
+                        } catch (error) {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                            content: Text('Animal não cadastrado!'),
+                          ));
+                        }
+                      },
+                      child: const SizedBox(
+                        width: 232,
+                        height: 40,
+                        child: Center(
+                          child: Text(
+                            "COLOCAR PARA ADOÇÃO",
+                            style: TextStyle(
+                              fontSize: 12.0,
+                              fontFamily: 'Roboto',
+                              fontWeight: FontWeight.w400,
+                              color: Color.fromARGB(255, 67, 67, 67),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 24),
+          ]),
     );
   }
 }

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../AdoptAnimal/index.dart';
-import '../AllAnimals/index.dart';
 import '../AnimalRegistry/index.dart';
 import '../Login/index.dart';
 import '../MyAnimals/index.dart';
@@ -16,7 +15,8 @@ class IntroductionScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         systemOverlayStyle: const SystemUiOverlayStyle(
-            statusBarColor: Color.fromARGB(255, 136, 201, 191)),
+            statusBarColor: Colors.transparent,
+            statusBarIconBrightness: Brightness.dark),
         iconTheme:
             const IconThemeData(color: Color.fromARGB(255, 136, 201, 191)),
         backgroundColor: Colors.transparent,

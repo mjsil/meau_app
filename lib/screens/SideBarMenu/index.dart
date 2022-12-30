@@ -19,6 +19,7 @@ class _NavBarState extends State<NavBar> {
   Widget build(BuildContext context) {
     return Drawer(
       child: ListView(
+        padding: const EdgeInsets.all(0.0),
         children: [
           UserAccountsDrawerHeader(
             accountName: const Text('Pedro'),

@@ -46,6 +46,7 @@ dependencies:
   google_fonts: ^3.0.1
   material_design_icons_flutter: ^6.0.7096
   provider: ^6.0.5
+  flutter_launcher_icons: ^0.11.0
 
 dev_dependencies:
   flutter_test:
@@ -91,6 +92,24 @@ flutter:
         asset: "fonts/Courgette-regular.ttf"
         style: "normal"
         weight: 400
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/Icon/Meau_Icone.png"
+  min_sdk_android: 19
+  web:
+    generate: true
+    image_path: "assets/Icon/Meau_Icone.png"
+    background_color: "#hexcode"
+    theme_color: "#hexcode"
+  windows:
+    generate: true
+    image_path: "assets/Icon/Meau_Icone.png"
+    icon_size: 48 # min:48, max:256, default: 48
+  macos:
+    generate: true
+    image_path: "assets/Icon/Meau_Icone.png"
 
   # To add assets to your application, add an assets section, like this:
   # assets:
