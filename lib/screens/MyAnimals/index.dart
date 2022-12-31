@@ -44,7 +44,7 @@ class _MyAnimalsScreenState extends State<MyAnimalsScreen> {
           IconButton(
             icon: const Icon(
               Icons.search,
-              color: Colors.white,
+              color: Color.fromARGB(255, 67, 67, 67),
             ),
             onPressed: () {
               // do something
