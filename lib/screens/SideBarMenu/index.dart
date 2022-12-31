@@ -34,7 +34,7 @@ class _NavBarState extends State<NavBar> {
             ),
           ),
           ExpansionTile(
-            leading: const Icon(Icons.favorite),
+            leading: const Icon(Icons.pets),
             title: const Text('Atalhos'),
             textColor: const Color.fromARGB(255, 67, 67, 67),
             collapsedBackgroundColor: const Color.fromARGB(255, 254, 226, 155),
