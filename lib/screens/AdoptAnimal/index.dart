@@ -31,6 +31,7 @@ class _AdoptAnimalState extends State<AdoptAnimal> {
         title: const Text(
           "Adotar",
           style: TextStyle(
+            fontSize: 20,
             color: Color.fromARGB(255, 67, 67, 67),
             fontFamily: 'Roboto',
             fontWeight: FontWeight.w500,
@@ -40,7 +41,7 @@ class _AdoptAnimalState extends State<AdoptAnimal> {
           IconButton(
             icon: const Icon(
               Icons.search,
-              color: Colors.white,
+              color: Color.fromARGB(255, 67, 67, 67),
             ),
             onPressed: () {
               // do something
@@ -95,14 +96,23 @@ class _AdoptAnimalState extends State<AdoptAnimal> {
                                 ],
                               ),
                               alignment: Alignment.topLeft,
-                              child: ListView(
-                                physics: const NeverScrollableScrollPhysics(),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   const SizedBox(height: 5),
                                   Row(
                                     children: [
                                       const SizedBox(width: 10),
-                                      Text(snap[index]['name']),
+                                      Text(
+                                        snap[index]['name'],
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          color:
+                                              Color.fromARGB(255, 67, 67, 67),
+                                          fontFamily: 'Roboto',
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
                                       const Spacer(),
                                       const Icon(Icons.favorite_border),
                                       const SizedBox(width: 10),
@@ -131,18 +141,56 @@ class _AdoptAnimalState extends State<AdoptAnimal> {
                                     ),
                                   ),
                                   const SizedBox(height: 5),
-                                  Wrap(
-                                    alignment: WrapAlignment.spaceAround,
+                                  Row(
                                     children: [
-                                      Text(snap[index]['sex']),
-                                      Text(snap[index]['age']),
-                                      Text(snap[index]['size']),
+                                      const Spacer(),
+                                      Text(
+                                        snap[index]['sex'],
+                                        style: const TextStyle(
+                                          fontSize: 12,
+                                          color:
+                                              Color.fromARGB(255, 67, 67, 67),
+                                          fontFamily: 'Roboto',
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),
+                                      const Spacer(),
+                                      Text(
+                                        snap[index]['age'],
+                                        style: const TextStyle(
+                                          fontSize: 12,
+                                          color:
+                                              Color.fromARGB(255, 67, 67, 67),
+                                          fontFamily: 'Roboto',
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),
+                                      const Spacer(),
+                                      Text(
+                                        snap[index]['size'],
+                                        style: const TextStyle(
+                                          fontSize: 12,
+                                          color:
+                                              Color.fromARGB(255, 67, 67, 67),
+                                          fontFamily: 'Roboto',
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),
+                                      const Spacer(),
                                     ],
                                   ),
                                   const SizedBox(height: 5),
                                   const Center(
-                                      child: Text(
-                                          "SAMAMBAIA SUL – DISTRITO FEDERAL"))
+                                    child: Text(
+                                      "SAMAMBAIA SUL – DISTRITO FEDERAL",
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: Color.fromARGB(255, 67, 67, 67),
+                                        fontFamily: 'Roboto',
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                  )
                                 ],
                               ),
                             ),
