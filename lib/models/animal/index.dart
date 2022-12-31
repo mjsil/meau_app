@@ -2,6 +2,7 @@ import 'dart:ffi';
 
 class Animal {
   final String uid;
+  final String photo;
   final String name;
   final String sickness;
   final String prescription;
@@ -25,6 +26,7 @@ class Animal {
 
   Animal(
     this.uid,
+    this.photo,
     this.name,
     this.sickness,
     this.prescription,
