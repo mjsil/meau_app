@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../AnimalDetail/index.dart';
+import '../../services/storage/index.dart';
 
 class MyAnimalsScreen extends StatefulWidget {
   const MyAnimalsScreen({Key? key}) : super(key: key);
@@ -17,6 +18,7 @@ class _MyAnimalsScreenState extends State<MyAnimalsScreen> {
   Widget build(BuildContext context) {
     final FirebaseAuth auth = FirebaseAuth.instance;
     final User? user = auth.currentUser;
+    final Storage storage = Storage();
 
     const Color background = Color.fromARGB(255, 207, 233, 229);
     const Color fill = Colors.white;
@@ -123,26 +125,41 @@ class _MyAnimalsScreenState extends State<MyAnimalsScreen> {
                                     ],
                                   ),
                                   const SizedBox(height: 5),
-                                  Container(
-                                    width: 344,
-                                    height: 183,
-                                    decoration: const BoxDecoration(
-                                        image: DecorationImage(
-                                      image: AssetImage(
-                                          'assets/ImagemTeste/pet.jpeg'),
-                                      fit: BoxFit.cover,
-                                    )),
-                                    child: Material(
-                                      color: Colors.transparent,
-                                      child: InkWell(
-                                        onTap: () => Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const AnimalDetailScreen()),
-                                        ),
-                                      ),
-                                    ),
+                                  FutureBuilder(
+                                    future: storage.downloadURL(snap[index]['photo']),
+                                    builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+                                      if(snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
+                                        return Container(
+                                          width: 344,
+                                          height: 183,
+                                          decoration: BoxDecoration(
+                                            image: DecorationImage(
+                                              image: NetworkImage(snapshot.data!),
+                                              fit: BoxFit.cover
+                                            )
+                                          ),
+                                          child: Material(
+                                            color: Colors.transparent,
+                                            child: InkWell(
+                                              onTap: () => Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                    const AnimalDetailScreen()),
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      }
+                                      
+                                      return const SizedBox(
+                                        width: 344,
+                                        height: 183,
+                                        child: Center(
+                                          child: CircularProgressIndicator(),
+                                        ) 
+                                      );
+                                    }
                                   ),
                                   const SizedBox(height: 5),
                                   const Center(

@@ -1,35 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:uuid/uuid.dart';
 
-import '../../models/user/index.dart';
-import '../../services/auth/index.dart';
-import '../AddAnimalPhoto/index.dart';
+import '../../services/storage/index.dart';
 
-class AnimalRegistryScreen extends StatelessWidget {
+class AnimalRegistryScreen extends StatefulWidget {
   const AnimalRegistryScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final authService = Provider.of<AuthService>(context);
-
-    return StreamBuilder<User?>(
-        stream: authService.user,
-        builder: (_, AsyncSnapshot<User?> snapshot) {
-          final User? user = snapshot.data;
-
-          return MyCustomForm(
-            uid: user?.uid,
-          );
-        });
-  }
-}
-
-class MyCustomForm extends StatefulWidget {
-  const MyCustomForm({super.key, required this.uid});
-
-  final String? uid;
 
   @override
   AnimalRegistry createState() {
@@ -37,7 +16,7 @@ class MyCustomForm extends StatefulWidget {
   }
 }
 
-class AnimalRegistry extends State<MyCustomForm> {
+class AnimalRegistry extends State<AnimalRegistryScreen> {
   //Instancia Firestore
   FirebaseFirestore db = FirebaseFirestore.instance;
 
@@ -69,6 +48,9 @@ class AnimalRegistry extends State<MyCustomForm> {
   bool? housePicture = false;
   bool? previousVisit = false;
 
+  late String imageName = '';
+  final User? user = FirebaseAuth.instance.currentUser;
+
   @override
   void initState() {
     super.initState();
@@ -76,6 +58,10 @@ class AnimalRegistry extends State<MyCustomForm> {
 
   @override
   Widget build(BuildContext context) {
+    final Storage storage = Storage();
+    var uuid = const Uuid();
+    final uid = uuid.v4();
+
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 250, 250, 250),
       appBar: AppBar(
@@ -337,31 +323,64 @@ class AnimalRegistry extends State<MyCustomForm> {
                   child: Material(
                     color: Colors.transparent,
                     child: InkWell(
-                      onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const AddPhotoScreenAnimal()),
-                      ),
+                      onTap: () async {
+                        final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+
+                        if(image == null) {
+                          // ignore: use_build_context_synchronously
+                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                            content: Text('Imagem não selecionada!'),
+                          ));
+
+                          return;
+                        }
+
+                        final path = image.path;
+
+                        storage.uploadFile(path, uid).then((value) => 
+                          setState(() {
+                            imageName = uid;
+                        }));
+                      },
                       child: SizedBox(
                         width: 312,
                         height: 128,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
-                            SizedBox(height: 44),
-                            Icon(Icons.control_point),
-                            Text(
-                              "adicionar fotos",
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontFamily: 'Roboto',
-                                fontWeight: FontWeight.w400,
-                                color: Color.fromARGB(255, 67, 67, 67),
+                        child: Center(
+                          child: imageName == ''
+                            ? Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: const [
+                                  SizedBox(height: 44),
+                                  Icon(Icons.control_point),
+                                  Text(
+                                    "adicionar fotos",
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontFamily: 'Roboto',
+                                      fontWeight: FontWeight.w400,
+                                      color: Color.fromARGB(255, 67, 67, 67),
+                                    ),
+                                  ),
+                                  SizedBox(height: 44),
+                                ],
+                              )
+                            : FutureBuilder(
+                                future: storage.downloadURL(imageName),
+                                builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+                                  if(snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
+                                    return SizedBox(
+                                      height: 300,
+                                      child: Image.network(
+                                        snapshot.data!, 
+                                        fit: BoxFit.cover,
+                                      ),
+                                    );
+                                  }
+                                  
+                                  return const CircularProgressIndicator();
+                                }
                               ),
-                            ),
-                            SizedBox(height: 44),
-                          ],
-                        ),
+                        )
                       ),
                     ),
                   ),
@@ -1237,7 +1256,8 @@ class AnimalRegistry extends State<MyCustomForm> {
                       onTap: () async {
                         try {
                           await db.collection('animal').doc().set({
-                            'owner': widget.uid,
+                            'owner': user?.uid,
+                            'photo': imageName,
                             'name': nameController.text,
                             'sickness': sicknessController.text,
                             'history': historyController.text,
