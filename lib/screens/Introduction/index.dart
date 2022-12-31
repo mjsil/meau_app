@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
-import '../AllAnimals/index.dart';
+import '../../services/auth/index.dart';
+import '../AdoptAnimal/index.dart';
 import '../AnimalRegistry/index.dart';
-import '../Login/index.dart';
 import '../MyAnimals/index.dart';
 import '../SideBarMenu/index.dart';
 
@@ -12,10 +13,13 @@ class IntroductionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final authService = Provider.of<AuthService>(context);
+    
     return Scaffold(
       appBar: AppBar(
         systemOverlayStyle: const SystemUiOverlayStyle(
-            statusBarColor: Color.fromARGB(255, 136, 201, 191)),
+            statusBarColor: Colors.transparent,
+            statusBarIconBrightness: Brightness.dark),
         iconTheme:
             const IconThemeData(color: Color.fromARGB(255, 136, 201, 191)),
         backgroundColor: Colors.transparent,
@@ -71,7 +75,7 @@ class IntroductionScreen extends StatelessWidget {
                   onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => AnimalsScreen()),
+                        builder: (context) => const AdoptAnimal()),
                   ),
                   child: const SizedBox(
                     width: 232.0,
@@ -187,12 +191,9 @@ class IntroductionScreen extends StatelessWidget {
                   fontSize: 16.0,
                 ),
               ),
-              onPressed: () => Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const LoginScreen()),
-              ),
+              onPressed: () => authService.signOut(),
               child: const Text(
-                "login",
+                "SAIR",
                 style: TextStyle(
                   fontFamily: 'Roboto',
                   fontWeight: FontWeight.w400,
@@ -200,11 +201,6 @@ class IntroductionScreen extends StatelessWidget {
                 ),
               ),
             ),
-            //Meau logo
-            const SizedBox(height: 68),
-            Image.asset("assets/IntroductionLogo/Meau_marca_2.png",
-                width: 122, height: 44),
-            const SizedBox(height: 32),
           ],
         ),
       ),

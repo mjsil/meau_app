@@ -1,26 +1,23 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../AnimalDetail/index.dart';
 import '../../services/storage/index.dart';
+import '../AnimalDetail/index.dart';
 
-class MyAnimalsScreen extends StatefulWidget {
-  const MyAnimalsScreen({Key? key}) : super(key: key);
+class AdoptAnimal extends StatefulWidget {
+  const AdoptAnimal({Key? key}) : super(key: key);
 
   @override
-  State<MyAnimalsScreen> createState() => _MyAnimalsScreenState();
+  State<AdoptAnimal> createState() => _AdoptAnimalState();
 }
 
-class _MyAnimalsScreenState extends State<MyAnimalsScreen> {
+class _AdoptAnimalState extends State<AdoptAnimal> {
   @override
   Widget build(BuildContext context) {
-    final FirebaseAuth auth = FirebaseAuth.instance;
-    final User? user = auth.currentUser;
     final Storage storage = Storage();
-
-    const Color background = Color.fromARGB(255, 207, 233, 229);
+    
+    const Color background = Color.fromARGB(255, 254, 226, 155);
     const Color fill = Colors.white;
     final List<Color> gradient = [
       background,
@@ -35,8 +32,9 @@ class _MyAnimalsScreenState extends State<MyAnimalsScreen> {
       backgroundColor: const Color.fromARGB(255, 250, 250, 250),
       appBar: AppBar(
         title: const Text(
-          "Meus Pets",
+          "Adotar",
           style: TextStyle(
+            fontSize: 20,
             color: Color.fromARGB(255, 67, 67, 67),
             fontFamily: 'Roboto',
             fontWeight: FontWeight.w500,
@@ -54,9 +52,9 @@ class _MyAnimalsScreenState extends State<MyAnimalsScreen> {
           )
         ],
         systemOverlayStyle: const SystemUiOverlayStyle(
-            statusBarColor: Color.fromARGB(255, 88, 155, 155)),
+            statusBarColor: Color.fromARGB(255, 247, 168, 0)),
         iconTheme: const IconThemeData(color: Color.fromARGB(255, 67, 67, 67)),
-        backgroundColor: const Color.fromARGB(255, 136, 201, 191),
+        backgroundColor: const Color.fromARGB(255, 255, 211, 88),
         elevation: 0,
       ),
       body: SingleChildScrollView(
@@ -64,10 +62,8 @@ class _MyAnimalsScreenState extends State<MyAnimalsScreen> {
         child: Column(
           children: [
             StreamBuilder<QuerySnapshot>(
-              stream: FirebaseFirestore.instance
-                  .collection("animal")
-                  .where("owner", isEqualTo: user?.uid)
-                  .snapshots(),
+              stream:
+                  FirebaseFirestore.instance.collection("animal").snapshots(),
               builder: (BuildContext context,
                   AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (snapshot.hasData) {
@@ -104,6 +100,7 @@ class _MyAnimalsScreenState extends State<MyAnimalsScreen> {
                               ),
                               alignment: Alignment.topLeft,
                               child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   const SizedBox(height: 5),
                                   Row(
@@ -120,7 +117,7 @@ class _MyAnimalsScreenState extends State<MyAnimalsScreen> {
                                         ),
                                       ),
                                       const Spacer(),
-                                      const Icon(Icons.error),
+                                      const Icon(Icons.favorite_border),
                                       const SizedBox(width: 10),
                                     ],
                                   ),
@@ -162,26 +159,53 @@ class _MyAnimalsScreenState extends State<MyAnimalsScreen> {
                                     }
                                   ),
                                   const SizedBox(height: 5),
-                                  const Center(
-                                    child: Text(
-                                      "3 NOVOS INTERESSADOS",
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: Color.fromARGB(255, 67, 67, 67),
-                                        fontFamily: 'Roboto',
-                                        fontWeight: FontWeight.w500,
+                                  Row(
+                                    children: [
+                                      const Spacer(),
+                                      Text(
+                                        snap[index]['sex'],
+                                        style: const TextStyle(
+                                          fontSize: 12,
+                                          color:
+                                              Color.fromARGB(255, 67, 67, 67),
+                                          fontFamily: 'Roboto',
+                                          fontWeight: FontWeight.w400,
+                                        ),
                                       ),
-                                    ),
+                                      const Spacer(),
+                                      Text(
+                                        snap[index]['age'],
+                                        style: const TextStyle(
+                                          fontSize: 12,
+                                          color:
+                                              Color.fromARGB(255, 67, 67, 67),
+                                          fontFamily: 'Roboto',
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),
+                                      const Spacer(),
+                                      Text(
+                                        snap[index]['size'],
+                                        style: const TextStyle(
+                                          fontSize: 12,
+                                          color:
+                                              Color.fromARGB(255, 67, 67, 67),
+                                          fontFamily: 'Roboto',
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),
+                                      const Spacer(),
+                                    ],
                                   ),
                                   const SizedBox(height: 5),
                                   const Center(
                                     child: Text(
-                                      "APADRINHAMENTO | AJUDA",
+                                      "SAMAMBAIA SUL – DISTRITO FEDERAL",
                                       style: TextStyle(
                                         fontSize: 12,
                                         color: Color.fromARGB(255, 67, 67, 67),
                                         fontFamily: 'Roboto',
-                                        fontWeight: FontWeight.w500,
+                                        fontWeight: FontWeight.w400,
                                       ),
                                     ),
                                   )

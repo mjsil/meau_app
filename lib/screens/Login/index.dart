@@ -42,6 +42,7 @@ class LoginScreen extends StatelessWidget {
             SizedBox(
               width: 312,
               child: TextField(
+                cursorColor: const Color.fromARGB(255, 136, 201, 191),
                 style: const TextStyle(
                   color: Color.fromARGB(255, 189, 189, 189),
                   fontSize: 14,
@@ -78,6 +79,7 @@ class LoginScreen extends StatelessWidget {
             SizedBox(
               width: 312,
               child: TextField(
+                cursorColor: const Color.fromARGB(255, 136, 201, 191),
                 obscureText: true,
                 style: const TextStyle(
                   color: Color.fromARGB(255, 189, 189, 189),
@@ -134,13 +136,13 @@ class LoginScreen extends StatelessWidget {
                   onTap: () async {
                     try {
                       await authService.signInWithEmailAndPassword(
-                        emailController.text, 
+                        emailController.text,
                         passwordController.text,
                       );
 
                       // ignore: use_build_context_synchronously
                       Navigator.of(context).pushNamed("/home");
-                    } catch(error) {
+                    } catch (error) {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                         content: Text('Usuário não encontrado'),
                       ));
@@ -270,5 +272,5 @@ class LoginScreen extends StatelessWidget {
         ),
       ),
     );
-  } 
+  }
 }
