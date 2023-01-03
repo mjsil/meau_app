@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'dart:core';
+
+extension StringExtension on String {
+  String capitalize() {
+    return "${this[0].toUpperCase()}${substring(1).toLowerCase()}";
+  }
+}
 
 class AnimalDetailScreen extends StatelessWidget {
   final String name;
@@ -54,6 +61,24 @@ class AnimalDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<String> temperText = [
+      (playful ? "brincalhão" : ""),
+      (shy ? "tímido" : ""),
+      (calm ? "calmo" : ""),
+      (watchDog ? "guarda" : ""),
+      (lovable ? "amoroso" : ""),
+      (lazy ? "preguiçoso" : ""),
+    ];
+
+    List<String> adoptRequirementText = [
+      (adoptionTerm ? "termo de adoção" : ""),
+      (housePicture ? "fotos da casa" : ""),
+      (previousVisit ? "visita prévia" : ""),
+    ];
+
+    temperText.removeWhere((item) => item == "");
+    adoptRequirementText.removeWhere((item) => item == "");
+
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 250, 250, 250),
       appBar: AppBar(
@@ -152,7 +177,7 @@ class AnimalDetailScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          sex,
+                          sex.capitalize(),
                           style: const TextStyle(
                             fontSize: 14,
                             fontFamily: 'Roboto',
@@ -177,7 +202,7 @@ class AnimalDetailScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          size,
+                          size.capitalize(),
                           style: const TextStyle(
                             fontSize: 14,
                             fontFamily: 'Roboto',
@@ -202,7 +227,7 @@ class AnimalDetailScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          age,
+                          age.capitalize(),
                           style: const TextStyle(
                             fontSize: 14,
                             fontFamily: 'Roboto',
@@ -261,7 +286,7 @@ class AnimalDetailScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          castrated ? "`Sim" : "`Não",
+                          castrated ? "Sim" : "Não",
                           style: const TextStyle(
                             fontSize: 14,
                             fontFamily: 'Roboto',
@@ -281,7 +306,7 @@ class AnimalDetailScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          vaccinated ? "`Sim" : "`Não",
+                          vaccinated ? "Sim" : "Não",
                           style: const TextStyle(
                             fontSize: 14,
                             fontFamily: 'Roboto',
@@ -306,7 +331,7 @@ class AnimalDetailScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          dewormed ? "`Sim" : "`Não",
+                          dewormed ? "Sim" : "Não",
                           style: const TextStyle(
                             fontSize: 14,
                             fontFamily: 'Roboto',
@@ -326,7 +351,7 @@ class AnimalDetailScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          sick ? "`Doente" : "`Nenhuma",
+                          sick ? "Doente" : "Nenhuma",
                           style: const TextStyle(
                             fontSize: 14,
                             fontFamily: 'Roboto',
@@ -356,7 +381,7 @@ class AnimalDetailScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      "${playful ? "brincalhão" : ""} ${shy ? "tímido" : ""} ${calm ? "calmo" : ""} ${watchDog ? "guarda" : ""} ${lovable ? "amoroso" : ""} ${lazy ? "preguiçoso" : ""}",
+                      temperText.join(', ').capitalize(),
                       style: const TextStyle(
                         fontSize: 14,
                         fontFamily: 'Roboto',
@@ -383,7 +408,7 @@ class AnimalDetailScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      "${adoptionTerm ? "termo de adoção" : ""} ${housePicture ? "fotos da casa" : ""} ${previousVisit ? "visita prévia" : ""} ",
+                      adoptRequirementText.join(', ').capitalize(),
                       style: const TextStyle(
                         fontSize: 14,
                         fontFamily: 'Roboto',
