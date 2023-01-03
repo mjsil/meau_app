@@ -324,11 +324,13 @@ class AnimalRegistry extends State<AnimalRegistryScreen> {
                     color: Colors.transparent,
                     child: InkWell(
                       onTap: () async {
-                        final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+                        final image = await ImagePicker()
+                            .pickImage(source: ImageSource.gallery);
 
-                        if(image == null) {
+                        if (image == null) {
                           // ignore: use_build_context_synchronously
-                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
                             content: Text('Imagem não selecionada!'),
                           ));
 
@@ -337,51 +339,55 @@ class AnimalRegistry extends State<AnimalRegistryScreen> {
 
                         final path = image.path;
 
-                        storage.uploadFile(path, uid).then((value) => 
-                          setState(() {
-                            imageName = uid;
-                        }));
+                        storage
+                            .uploadFile(path, uid)
+                            .then((value) => setState(() {
+                                  imageName = uid;
+                                }));
                       },
                       child: SizedBox(
-                        width: 312,
-                        height: 128,
-                        child: Center(
-                          child: imageName == ''
-                            ? Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: const [
-                                  SizedBox(height: 44),
-                                  Icon(Icons.control_point),
-                                  Text(
-                                    "adicionar fotos",
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontFamily: 'Roboto',
-                                      fontWeight: FontWeight.w400,
-                                      color: Color.fromARGB(255, 67, 67, 67),
-                                    ),
-                                  ),
-                                  SizedBox(height: 44),
-                                ],
-                              )
-                            : FutureBuilder(
-                                future: storage.downloadURL(imageName),
-                                builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-                                  if(snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
-                                    return SizedBox(
-                                      height: 300,
-                                      child: Image.network(
-                                        snapshot.data!, 
-                                        fit: BoxFit.cover,
+                          width: 312,
+                          height: 128,
+                          child: Center(
+                            child: imageName == ''
+                                ? Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: const [
+                                      SizedBox(height: 44),
+                                      Icon(Icons.control_point),
+                                      Text(
+                                        "adicionar fotos",
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          fontFamily: 'Roboto',
+                                          fontWeight: FontWeight.w400,
+                                          color:
+                                              Color.fromARGB(255, 67, 67, 67),
+                                        ),
                                       ),
-                                    );
-                                  }
-                                  
-                                  return const CircularProgressIndicator();
-                                }
-                              ),
-                        )
-                      ),
+                                      SizedBox(height: 44),
+                                    ],
+                                  )
+                                : FutureBuilder(
+                                    future: storage.downloadURL(imageName),
+                                    builder: (BuildContext context,
+                                        AsyncSnapshot<String> snapshot) {
+                                      if (snapshot.connectionState ==
+                                              ConnectionState.done &&
+                                          snapshot.hasData) {
+                                        return SizedBox(
+                                          width: 312,
+                                          height: 128,
+                                          child: Image.network(
+                                            snapshot.data!,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        );
+                                      }
+
+                                      return const CircularProgressIndicator();
+                                    }),
+                          )),
                     ),
                   ),
                 ),
@@ -1275,6 +1281,9 @@ class AnimalRegistry extends State<AnimalRegistryScreen> {
                             'dewormed': dewormed,
                             'castrated': castrated,
                             'sick': sick,
+                            'adoptionTerm': adoptionTerm,
+                            'housePicture': housePicture,
+                            'previousVisit': previousVisit,
                           });
 
                           // ignore: use_build_context_synchronously
