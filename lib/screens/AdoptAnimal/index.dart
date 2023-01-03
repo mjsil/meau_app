@@ -183,39 +183,6 @@ class _AdoptAnimalState extends State<AdoptAnimal> {
                                           bool snapPreviousVisit =
                                               snap[index]['previousVisit'];
 
-                                          switch (snapSex.toLowerCase()) {
-                                            case "macho":
-                                              snapSex = "`Macho";
-                                              break;
-                                            case "fêmea":
-                                              snapSex = "`Fêmea";
-                                              break;
-                                          }
-
-                                          switch (snapSize.toLowerCase()) {
-                                            case "pequeno":
-                                              snapSize = "`Pequeno";
-                                              break;
-                                            case "médio":
-                                              snapSize = "`Médio";
-                                              break;
-                                            case "grande":
-                                              snapSize = "`Grande";
-                                              break;
-                                          }
-
-                                          switch (snapAge.toLowerCase()) {
-                                            case "filhote":
-                                              snapAge = "`Pequeno";
-                                              break;
-                                            case "médio":
-                                              snapAge = "`Médio";
-                                              break;
-                                            case "idoso":
-                                              snapAge = "`Idoso";
-                                              break;
-                                          }
-
                                           return Container(
                                             width: 344,
                                             height: 183,
