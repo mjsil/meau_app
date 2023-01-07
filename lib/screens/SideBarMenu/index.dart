@@ -32,6 +32,7 @@ class _NavBarState extends State<NavBar> {
             decoration: const BoxDecoration(
               color: Color.fromARGB(255, 136, 201, 191),
             ),
+            onDetailsPressed: () => {},
           ),
           ExpansionTile(
             leading: const Icon(Icons.pets),
