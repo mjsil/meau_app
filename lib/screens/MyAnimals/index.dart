@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../AnimalDetail/index.dart';
+import '../MyAnimalDetail/index.dart';
 import '../../services/storage/index.dart';
 
 class MyAnimalsScreen extends StatefulWidget {
@@ -201,7 +201,7 @@ class _MyAnimalsScreenState extends State<MyAnimalsScreen> {
                                                   context,
                                                   MaterialPageRoute(
                                                       builder: (context) =>
-                                                          AnimalDetailScreen(
+                                                          MyAnimalDetailScreen(
                                                             name: snapName,
                                                             pictureUrl:
                                                                 snapPictureUrl,
