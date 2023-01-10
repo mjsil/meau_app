@@ -1,6 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:core';
+
+import 'dart:convert';
+
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:http/http.dart' as http;
 
 extension StringExtension on String {
   String capitalize() {
@@ -8,7 +17,7 @@ extension StringExtension on String {
   }
 }
 
-class AnimalDetailScreen extends StatelessWidget {
+class AnimalDetailScreen extends StatefulWidget {
   final String name;
   final String pictureUrl;
   final String sex;
@@ -32,6 +41,9 @@ class AnimalDetailScreen extends StatelessWidget {
   //
   final String sickness;
   final String history;
+
+  //owner
+  final String owner;
 
   const AnimalDetailScreen({
     Key? key,
@@ -57,23 +69,192 @@ class AnimalDetailScreen extends StatelessWidget {
     required this.adoptionTerm,
     required this.housePicture,
     required this.previousVisit,
+    //owner
+    required this.owner,
   }) : super(key: key);
+
+  @override
+  State<AnimalDetailScreen> createState() => _AnimalDetailScreenState();
+}
+
+class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
+  late AndroidNotificationChannel channel;
+  late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+
+  //String? token = " ";
+
+  @override
+  void initState() {
+    super.initState();
+
+    requestPermission();
+
+    loadFCM();
+
+    listenFCM();
+
+    // getToken();
+
+    //FirebaseMessaging.instance.subscribeToTopic("Animal");
+  }
+
+  // void getToken() async {
+  //   await FirebaseMessaging.instance.getToken().then((token) {
+  //     setState(() {
+  //       token = token;
+  //     });
+  //   });
+  // }
+
+  void sendPushMessage(String token) async {
+    // FirebaseMessaging firebaseMessage = FirebaseMessaging.instance;
+    // String? deviceToken = await firebaseMessage.getToken();
+    try {
+      await http.post(
+        Uri.parse('https://fcm.googleapis.com/fcm/send'),
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization':
+              'key=AAAAu2sjcYc:APA91bEmdLSWh8ZFYBF6sviOcb-pVwG_m_q4UxJeaySxss6TJiZkBhKhRJm7Le7IzKeTrmBRpc1lb5o4Whfy0E0rScTvBp6cXy4oRolRSyjcDX9JtEB67Neo3Z8Me107wpYdGSUru6M-',
+        },
+        body: jsonEncode(
+          <String, dynamic>{
+            'notification': <String, dynamic>{
+              //'title': 'alguém pretende adotar o(a) ${widget.name}',
+              'body': 'alguém pretende adotar ${widget.name}',
+            },
+            'priority': 'high',
+            'data': <String, dynamic>{
+              'click_action': 'FLUTTER_NOTIFICATION_CLICK',
+              'id': '1',
+              'status': 'done'
+            },
+            "to": token,
+            // "to": "$deviceToken",
+            // "to":
+            //     "e8z3oWLiTbma6KqWCaY_U5:APA91bEubU54kCiyKlDMjhFl695PHPr2bCqPSYx6VJ7dyBU7x8HLUQpu2VKDHcb4LdOQd32fFI2G9FNsTpqaXKkv53wgW44r0opnZzLDtKxsLfxbaAq6merWlSWCF5_j0FnlybZqYQkD",
+          },
+        ),
+      );
+    } catch (e) {
+      print("error push notification");
+    }
+  }
+
+  // void getToken() async {
+  //   await FirebaseMessaging.instance.getToken().then((token) => print(token));
+  // }
+
+  void requestPermission() async {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+    NotificationSettings settings = await messaging.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
+
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      print('User granted permission');
+    } else if (settings.authorizationStatus ==
+        AuthorizationStatus.provisional) {
+      print('User granted provisional permission');
+    } else {
+      print('User declined or has not accepted permission');
+    }
+  }
+
+  void listenFCM() async {
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      RemoteNotification? notification = message.notification;
+      AndroidNotification? android = message.notification?.android;
+      if (notification != null && android != null && !kIsWeb) {
+        flutterLocalNotificationsPlugin.show(
+          notification.hashCode,
+          notification.title,
+          notification.body,
+          NotificationDetails(
+            android: AndroidNotificationDetails(
+              channel.id,
+              channel.name,
+              // TODO add a proper drawable resource to android, for now using
+              //      one that already exists in example app.
+              icon: 'launch_background',
+            ),
+          ),
+        );
+      }
+    });
+  }
+
+  void loadFCM() async {
+    if (!kIsWeb) {
+      channel = const AndroidNotificationChannel(
+        'high_importance_channel', // id
+        'High Importance Notifications', // title
+        importance: Importance.high,
+        enableVibration: true,
+      );
+
+      flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
+      /// Create an Android Notification Channel.
+      ///
+      /// We use this channel in the `AndroidManifest.xml` file to override the
+      /// default FCM channel to enable heads up notifications.
+      await flutterLocalNotificationsPlugin
+          .resolvePlatformSpecificImplementation<
+              AndroidFlutterLocalNotificationsPlugin>()
+          ?.createNotificationChannel(channel);
+
+      /// Update the iOS foreground notification presentation options to allow
+      /// heads up notifications.
+      await FirebaseMessaging.instance
+          .setForegroundNotificationPresentationOptions(
+        alert: true,
+        badge: true,
+        sound: true,
+      );
+    }
+  }
+
+//   void selectNotification() async {
+// // Here you can check notification payload and redirect user to the respective screen
+//     await Navigator.push(
+//       context,
+//       MaterialPageRoute<void>(
+//           builder: (context) => const InterestedMyAnimalScreen()),
+//     );
+//   }
+
+  Future<void> saveTokenToDatabase(String deviceToken) async {
+    // Assume user is logged in for this example
+    String? userId = FirebaseAuth.instance.currentUser?.uid;
+
+    await FirebaseFirestore.instance.collection('people').doc(userId).update({
+      'tokens': FieldValue.arrayUnion([deviceToken]),
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     List<String> temperText = [
-      (playful ? "brincalhão" : ""),
-      (shy ? "tímido" : ""),
-      (calm ? "calmo" : ""),
-      (watchDog ? "guarda" : ""),
-      (lovable ? "amoroso" : ""),
-      (lazy ? "preguiçoso" : ""),
+      (widget.playful ? "brincalhão" : ""),
+      (widget.shy ? "tímido" : ""),
+      (widget.calm ? "calmo" : ""),
+      (widget.watchDog ? "guarda" : ""),
+      (widget.lovable ? "amoroso" : ""),
+      (widget.lazy ? "preguiçoso" : ""),
     ];
 
     List<String> adoptRequirementText = [
-      (adoptionTerm ? "termo de adoção" : ""),
-      (housePicture ? "fotos da casa" : ""),
-      (previousVisit ? "visita prévia" : ""),
+      (widget.adoptionTerm ? "termo de adoção" : ""),
+      (widget.housePicture ? "fotos da casa" : ""),
+      (widget.previousVisit ? "visita prévia" : ""),
     ];
 
     temperText.removeWhere((item) => item == "");
@@ -83,7 +264,7 @@ class AnimalDetailScreen extends StatelessWidget {
       backgroundColor: const Color.fromARGB(255, 250, 250, 250),
       appBar: AppBar(
         title: Text(
-          name,
+          widget.name,
           style: const TextStyle(
             fontSize: 20,
             color: Color.fromARGB(255, 67, 67, 67),
@@ -119,7 +300,8 @@ class AnimalDetailScreen extends StatelessWidget {
                     height: 184,
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                          image: NetworkImage(pictureUrl), fit: BoxFit.cover),
+                          image: NetworkImage(widget.pictureUrl),
+                          fit: BoxFit.cover),
                       boxShadow: [
                         BoxShadow(
                           color: Colors.black.withOpacity(0.2),
@@ -152,7 +334,7 @@ class AnimalDetailScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  name,
+                  widget.name,
                   style: const TextStyle(
                     fontSize: 16,
                     fontFamily: 'Roboto',
@@ -177,7 +359,7 @@ class AnimalDetailScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          sex.capitalize(),
+                          widget.sex.capitalize(),
                           style: const TextStyle(
                             fontSize: 14,
                             fontFamily: 'Roboto',
@@ -202,7 +384,7 @@ class AnimalDetailScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          size.capitalize(),
+                          widget.size.capitalize(),
                           style: const TextStyle(
                             fontSize: 14,
                             fontFamily: 'Roboto',
@@ -227,7 +409,7 @@ class AnimalDetailScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          age.capitalize(),
+                          widget.age.capitalize(),
                           style: const TextStyle(
                             fontSize: 14,
                             fontFamily: 'Roboto',
@@ -286,7 +468,7 @@ class AnimalDetailScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          castrated ? "Sim" : "Não",
+                          widget.castrated ? "Sim" : "Não",
                           style: const TextStyle(
                             fontSize: 14,
                             fontFamily: 'Roboto',
@@ -306,7 +488,7 @@ class AnimalDetailScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          vaccinated ? "Sim" : "Não",
+                          widget.vaccinated ? "Sim" : "Não",
                           style: const TextStyle(
                             fontSize: 14,
                             fontFamily: 'Roboto',
@@ -331,7 +513,7 @@ class AnimalDetailScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          dewormed ? "Sim" : "Não",
+                          widget.dewormed ? "Sim" : "Não",
                           style: const TextStyle(
                             fontSize: 14,
                             fontFamily: 'Roboto',
@@ -351,7 +533,7 @@ class AnimalDetailScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          sick ? "Doente" : "Nenhuma",
+                          widget.sick ? "Doente" : "Nenhuma",
                           style: const TextStyle(
                             fontSize: 14,
                             fontFamily: 'Roboto',
@@ -425,7 +607,7 @@ class AnimalDetailScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "MAIS SOBRE ${name.toUpperCase()}",
+                      "MAIS SOBRE ${widget.name.toUpperCase()}",
                       style: const TextStyle(
                         fontSize: 12,
                         fontFamily: 'Roboto',
@@ -435,7 +617,7 @@ class AnimalDetailScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      history,
+                      widget.history,
                       style: const TextStyle(
                         fontSize: 14,
                         fontFamily: 'Roboto',
@@ -466,7 +648,19 @@ class AnimalDetailScreen extends StatelessWidget {
                     child: Material(
                       color: Colors.transparent,
                       child: InkWell(
-                        onTap: () => {},
+                        onTap: () async {
+                          final User? user = FirebaseAuth.instance.currentUser;
+                          DocumentSnapshot snap = await FirebaseFirestore
+                              .instance
+                              .collection("people")
+                              .doc(widget.owner)
+                              .get();
+
+                          String token = snap['token'];
+                          print(token);
+
+                          sendPushMessage(token);
+                        },
                         child: const SizedBox(
                           width: 232.0,
                           height: 40.0,
