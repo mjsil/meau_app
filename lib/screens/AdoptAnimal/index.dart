@@ -136,6 +136,9 @@ class _AdoptAnimalState extends State<AdoptAnimal> {
                                           final String snapName =
                                               snap[index]['name'];
 
+                                          String snapOwner =
+                                              snap[index]['owner'];
+
                                           String snapSex = snap[index]['sex'];
 
                                           String snapSize = snap[index]['size'];
@@ -231,6 +234,7 @@ class _AdoptAnimalState extends State<AdoptAnimal> {
                                                                 snapHousePicture,
                                                             previousVisit:
                                                                 snapPreviousVisit,
+                                                            owner: snapOwner,
                                                           )),
                                                 ),
                                               ),
