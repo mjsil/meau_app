@@ -181,9 +181,7 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
             android: AndroidNotificationDetails(
               channel.id,
               channel.name,
-              // TODO add a proper drawable resource to android, for now using
-              //      one that already exists in example app.
-              icon: 'launch_background',
+              icon: '@mipmap/launcher_icon',
             ),
           ),
         );
