@@ -102,7 +102,24 @@ class _InterestedMyAnimalScreenState extends State<InterestedMyAnimalScreen> {
                                                   color: Colors.transparent,
                                                   child: InkWell(
                                                     onTap: () {
-                                                      print("tapped");
+                                                      // print(
+                                                      //   FirebaseFirestore
+                                                      //       .instance
+                                                      //       .collection(
+                                                      //           "animal")
+                                                      //       .doc(snap[index]
+                                                      //           ['animalId'])
+                                                      //       .update({
+                                                      //         "owner":
+                                                      //             "teste do owner"
+                                                      //       })
+                                                      //       .then((_) => print(
+                                                      //           'Success'))
+                                                      //       .catchError(
+                                                      //         (error) => print(
+                                                      //             'Failed: $error'),
+                                                      //       ),
+                                                      // );
                                                     },
                                                     child: const SizedBox(
                                                       width: double.infinity,
@@ -133,7 +150,13 @@ class _InterestedMyAnimalScreenState extends State<InterestedMyAnimalScreen> {
                                                   color: Colors.transparent,
                                                   child: InkWell(
                                                     onTap: () {
-                                                      print("tapped");
+                                                      //print(snapshot.data!.docs[index].id);
+                                                      FirebaseFirestore.instance
+                                                          .collection(
+                                                              "interested")
+                                                          .doc(snapshot.data!
+                                                              .docs[index].id)
+                                                          .delete();
                                                     },
                                                     child: const SizedBox(
                                                       width: double.infinity,
