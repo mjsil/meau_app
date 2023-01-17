@@ -130,62 +130,6 @@ class _AdoptAnimalState extends State<AdoptAnimal> {
                                         if (snapshot.connectionState ==
                                                 ConnectionState.done &&
                                             snapshot.hasData) {
-                                          final String snapPictureUrl =
-                                              snapshot.data!;
-
-                                          final String snapName =
-                                              snap[index]['name'];
-
-                                          String snapOwner =
-                                              snap[index]['owner'];
-
-                                          String snapSex = snap[index]['sex'];
-
-                                          String snapSize = snap[index]['size'];
-
-                                          String snapAge = snap[index]['age'];
-
-                                          String snapSickness =
-                                              snap[index]['sickness'];
-
-                                          String snapHistory =
-                                              snap[index]['history'];
-
-                                          bool snapCastrated =
-                                              snap[index]['castrated'];
-
-                                          bool snapDewormed =
-                                              snap[index]['dewormed'];
-
-                                          bool snapVaccinated =
-                                              snap[index]['vaccinated'];
-
-                                          bool snapSick = snap[index]['sick'];
-
-                                          bool snapPlayful =
-                                              snap[index]['playful'];
-
-                                          bool snapShy = snap[index]['shy'];
-
-                                          bool snapCalm = snap[index]['calm'];
-
-                                          bool snapWatchDog =
-                                              snap[index]['watchDog'];
-
-                                          bool snapLovable =
-                                              snap[index]['lovable'];
-
-                                          bool snapLazy = snap[index]['lazy'];
-
-                                          bool snapAdoptionTerm =
-                                              snap[index]['adoptionTerm'];
-
-                                          bool snapHousePicture =
-                                              snap[index]['housePicture'];
-
-                                          bool snapPreviousVisit =
-                                              snap[index]['previousVisit'];
-
                                           return Container(
                                             width: 344,
                                             height: 183,
@@ -200,42 +144,45 @@ class _AdoptAnimalState extends State<AdoptAnimal> {
                                                 onTap: () => Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          AnimalDetailScreen(
-                                                            name: snapName,
-                                                            pictureUrl:
-                                                                snapPictureUrl,
-                                                            sex: snapSex,
-                                                            size: snapSize,
-                                                            age: snapAge,
-                                                            castrated:
-                                                                snapCastrated,
-                                                            dewormed:
-                                                                snapDewormed,
-                                                            vaccinated:
-                                                                snapVaccinated,
-                                                            sick: snapSick,
-                                                            sickness:
-                                                                snapSickness,
-                                                            history:
-                                                                snapHistory,
-                                                            playful:
-                                                                snapPlayful,
-                                                            shy: snapShy,
-                                                            calm: snapCalm,
-                                                            watchDog:
-                                                                snapWatchDog,
-                                                            lovable:
-                                                                snapLovable,
-                                                            lazy: snapLazy,
-                                                            adoptionTerm:
-                                                                snapAdoptionTerm,
-                                                            housePicture:
-                                                                snapHousePicture,
-                                                            previousVisit:
-                                                                snapPreviousVisit,
-                                                            owner: snapOwner,
-                                                          )),
+                                                    builder: (context) =>
+                                                        AnimalDetailScreen(
+                                                      name: snap[index]['name'],
+                                                      pictureUrl:
+                                                          snapshot.data!,
+                                                      sex: snap[index]['sex'],
+                                                      size: snap[index]['size'],
+                                                      age: snap[index]['age'],
+                                                      castrated: snap[index]
+                                                          ['castrated'],
+                                                      dewormed: snap[index]
+                                                          ['dewormed'],
+                                                      vaccinated: snap[index]
+                                                          ['vaccinated'],
+                                                      sick: snap[index]['sick'],
+                                                      sickness: snap[index]
+                                                          ['sickness'],
+                                                      history: snap[index]
+                                                          ['history'],
+                                                      playful: snap[index]
+                                                          ['playful'],
+                                                      shy: snap[index]['shy'],
+                                                      calm: snap[index]['calm'],
+                                                      watchDog: snap[index]
+                                                          ['watchDog'],
+                                                      lovable: snap[index]
+                                                          ['lovable'],
+                                                      lazy: snap[index]['lazy'],
+                                                      adoptionTerm: snap[index]
+                                                          ['adoptionTerm'],
+                                                      housePicture: snap[index]
+                                                          ['housePicture'],
+                                                      previousVisit: snap[index]
+                                                          ['previousVisit'],
+                                                      id: snap[index]["id"],
+                                                      owner: snap[index]
+                                                          ["owner"],
+                                                    ),
+                                                  ),
                                                 ),
                                               ),
                                             ),
