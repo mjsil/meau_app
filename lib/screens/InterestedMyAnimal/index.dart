@@ -3,7 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class InterestedMyAnimalScreen extends StatefulWidget {
-  const InterestedMyAnimalScreen({super.key});
+  final String id;
+  const InterestedMyAnimalScreen({
+    Key? key,
+    required this.id,
+  }) : super(key: key);
 
   @override
   State<InterestedMyAnimalScreen> createState() =>
@@ -17,7 +21,7 @@ class _InterestedMyAnimalScreenState extends State<InterestedMyAnimalScreen> {
       backgroundColor: const Color.fromARGB(255, 250, 250, 250),
       appBar: AppBar(
         title: const Text(
-          "Adotar",
+          "Interessados",
           style: TextStyle(
             fontSize: 20,
             color: Color.fromARGB(255, 67, 67, 67),
@@ -37,9 +41,9 @@ class _InterestedMyAnimalScreenState extends State<InterestedMyAnimalScreen> {
           )
         ],
         systemOverlayStyle: const SystemUiOverlayStyle(
-            statusBarColor: Color.fromARGB(255, 247, 168, 0)),
+            statusBarColor: Color.fromARGB(255, 136, 201, 191)),
         iconTheme: const IconThemeData(color: Color.fromARGB(255, 67, 67, 67)),
-        backgroundColor: const Color.fromARGB(255, 255, 211, 88),
+        backgroundColor: const Color.fromARGB(255, 207, 233, 229),
         elevation: 0,
       ),
       body: SingleChildScrollView(
@@ -48,8 +52,8 @@ class _InterestedMyAnimalScreenState extends State<InterestedMyAnimalScreen> {
           children: [
             StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
-                  .collection("people")
-                  .where('index')
+                  .collection("interested")
+                  .where("animalId", isEqualTo: widget.id)
                   .snapshots(),
               builder: (BuildContext context,
                   AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -61,17 +65,123 @@ class _InterestedMyAnimalScreenState extends State<InterestedMyAnimalScreen> {
                     itemCount: snap.length,
                     itemBuilder: (context, index) {
                       return Center(
-                        child: Row(
+                        child: Column(
                           children: [
-                            Text(
-                              snap[index]['name'],
-                              style: const TextStyle(
-                                fontSize: 12,
-                                color: Color.fromARGB(255, 67, 67, 67),
-                                fontFamily: 'Roboto',
-                                fontWeight: FontWeight.w400,
+                            Container(
+                              alignment: Alignment.center,
+                              width: 200.0,
+                              height: 200.0,
+                              decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: AssetImage(
+                                      'assets/ImagemTeste/ImagemDePerfil.jpeg'),
+                                ),
+                              ),
+                              child: Material(
+                                color: Colors.transparent,
+                                child: InkWell(
+                                  onTap: () {
+                                    showModalBottomSheet(
+                                        context: context,
+                                        shape: const RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.vertical(
+                                            top: Radius.circular(25.0),
+                                          ),
+                                        ),
+                                        builder: (context) {
+                                          return SizedBox(
+                                            height: 100,
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: <Widget>[
+                                                Material(
+                                                  color: Colors.transparent,
+                                                  child: InkWell(
+                                                    onTap: () {
+                                                      print("tapped");
+                                                    },
+                                                    child: const SizedBox(
+                                                      width: double.infinity,
+                                                      height: 50,
+                                                      child: Center(
+                                                        child: Text(
+                                                          "ACEITAR ADOÇÃO",
+                                                          style: TextStyle(
+                                                            fontSize: 12.0,
+                                                            fontFamily:
+                                                                'Roboto',
+                                                            fontWeight:
+                                                                FontWeight.w400,
+                                                            color:
+                                                                Color.fromARGB(
+                                                              255,
+                                                              67,
+                                                              67,
+                                                              67,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                Material(
+                                                  color: Colors.transparent,
+                                                  child: InkWell(
+                                                    onTap: () {
+                                                      print("tapped");
+                                                    },
+                                                    child: const SizedBox(
+                                                      width: double.infinity,
+                                                      height: 50,
+                                                      child: Center(
+                                                        child: Text(
+                                                          "NEGAR ADOÇÃO",
+                                                          style: TextStyle(
+                                                            fontSize: 12.0,
+                                                            fontFamily:
+                                                                'Roboto',
+                                                            fontWeight:
+                                                                FontWeight.w400,
+                                                            color: Colors.red,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          );
+                                        });
+                                  },
+                                ),
                               ),
                             ),
+                            const SizedBox(height: 8),
+                            Text(
+                              snap[index]['interestedName'],
+                              style: const TextStyle(
+                                fontSize: 15,
+                                fontFamily: 'Roboto',
+                                fontWeight: FontWeight.w400,
+                                color: Color.fromARGB(255, 67, 67, 67),
+                              ),
+                            ),
+                            Text(
+                              "${snap[index]['interestedAge']} anos",
+                              style: const TextStyle(
+                                fontSize: 15,
+                                fontFamily: 'Roboto',
+                                fontWeight: FontWeight.w400,
+                                color: Color.fromARGB(255, 67, 67, 67),
+                              ),
+                            ),
+                            const SizedBox(height: 12),
                           ],
                         ),
                       );
@@ -81,10 +191,53 @@ class _InterestedMyAnimalScreenState extends State<InterestedMyAnimalScreen> {
                   return const SizedBox();
                 }
               },
-            )
+            ),
+            Center(
+              child: Container(
+                width: 232.0,
+                height: 40.0,
+                decoration: BoxDecoration(
+                  color: const Color.fromARGB(255, 136, 201, 191),
+                  borderRadius: BorderRadius.circular(2),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.3),
+                      spreadRadius: 1,
+                      blurRadius: 1,
+                      offset: const Offset(2, 2),
+                    ),
+                  ],
+                ),
+                child: Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: () {
+                      print("tapped");
+                    },
+                    child: const SizedBox(
+                      width: 232.0,
+                      height: 40.0,
+                      child: Center(
+                        child: Text(
+                          "IR PARA O CHAT",
+                          style: TextStyle(
+                            fontSize: 12.0,
+                            fontFamily: 'Roboto',
+                            fontWeight: FontWeight.w500,
+                            color: Color.fromARGB(255, 67, 67, 67),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),
     );
   }
 }
+//snap[index]['interestedName'],
+//"${snap[index]['interestedAge']} anos",
