@@ -16,7 +16,7 @@ class _AdoptAnimalState extends State<AdoptAnimal> {
   @override
   Widget build(BuildContext context) {
     final Storage storage = Storage();
-    
+
     const Color background = Color.fromARGB(255, 254, 226, 155);
     const Color fill = Colors.white;
     final List<Color> gradient = [
@@ -123,41 +123,133 @@ class _AdoptAnimalState extends State<AdoptAnimal> {
                                   ),
                                   const SizedBox(height: 5),
                                   FutureBuilder(
-                                    future: storage.downloadURL(snap[index]['photo']),
-                                    builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-                                      if(snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
-                                        return Container(
-                                          width: 344,
-                                          height: 183,
-                                          decoration: BoxDecoration(
-                                            image: DecorationImage(
-                                              image: NetworkImage(snapshot.data!),
-                                              fit: BoxFit.cover
-                                            )
-                                          ),
-                                          child: Material(
-                                            color: Colors.transparent,
-                                            child: InkWell(
-                                              onTap: () => Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                    const AnimalDetailScreen()),
+                                      future: storage
+                                          .downloadURL(snap[index]['photo']),
+                                      builder: (BuildContext context,
+                                          AsyncSnapshot<String> snapshot) {
+                                        if (snapshot.connectionState ==
+                                                ConnectionState.done &&
+                                            snapshot.hasData) {
+                                          final String snapPictureUrl =
+                                              snapshot.data!;
+
+                                          final String snapName =
+                                              snap[index]['name'];
+
+                                          String snapOwner =
+                                              snap[index]['owner'];
+
+                                          String snapSex = snap[index]['sex'];
+
+                                          String snapSize = snap[index]['size'];
+
+                                          String snapAge = snap[index]['age'];
+
+                                          String snapSickness =
+                                              snap[index]['sickness'];
+
+                                          String snapHistory =
+                                              snap[index]['history'];
+
+                                          bool snapCastrated =
+                                              snap[index]['castrated'];
+
+                                          bool snapDewormed =
+                                              snap[index]['dewormed'];
+
+                                          bool snapVaccinated =
+                                              snap[index]['vaccinated'];
+
+                                          bool snapSick = snap[index]['sick'];
+
+                                          bool snapPlayful =
+                                              snap[index]['playful'];
+
+                                          bool snapShy = snap[index]['shy'];
+
+                                          bool snapCalm = snap[index]['calm'];
+
+                                          bool snapWatchDog =
+                                              snap[index]['watchDog'];
+
+                                          bool snapLovable =
+                                              snap[index]['lovable'];
+
+                                          bool snapLazy = snap[index]['lazy'];
+
+                                          bool snapAdoptionTerm =
+                                              snap[index]['adoptionTerm'];
+
+                                          bool snapHousePicture =
+                                              snap[index]['housePicture'];
+
+                                          bool snapPreviousVisit =
+                                              snap[index]['previousVisit'];
+
+                                          return Container(
+                                            width: 344,
+                                            height: 183,
+                                            decoration: BoxDecoration(
+                                                image: DecorationImage(
+                                                    image: NetworkImage(
+                                                        snapshot.data!),
+                                                    fit: BoxFit.cover)),
+                                            child: Material(
+                                              color: Colors.transparent,
+                                              child: InkWell(
+                                                onTap: () => Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          AnimalDetailScreen(
+                                                            name: snapName,
+                                                            pictureUrl:
+                                                                snapPictureUrl,
+                                                            sex: snapSex,
+                                                            size: snapSize,
+                                                            age: snapAge,
+                                                            castrated:
+                                                                snapCastrated,
+                                                            dewormed:
+                                                                snapDewormed,
+                                                            vaccinated:
+                                                                snapVaccinated,
+                                                            sick: snapSick,
+                                                            sickness:
+                                                                snapSickness,
+                                                            history:
+                                                                snapHistory,
+                                                            playful:
+                                                                snapPlayful,
+                                                            shy: snapShy,
+                                                            calm: snapCalm,
+                                                            watchDog:
+                                                                snapWatchDog,
+                                                            lovable:
+                                                                snapLovable,
+                                                            lazy: snapLazy,
+                                                            adoptionTerm:
+                                                                snapAdoptionTerm,
+                                                            housePicture:
+                                                                snapHousePicture,
+                                                            previousVisit:
+                                                                snapPreviousVisit,
+                                                            owner: snapOwner,
+                                                          )),
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                        );
-                                      }
-                                      
-                                      return const SizedBox(
-                                        width: 344,
-                                        height: 183,
-                                        child: Center(
-                                          child: CircularProgressIndicator(),
-                                        ) 
-                                      );
-                                    }
-                                  ),
+                                          );
+                                        }
+
+                                        return const SizedBox(
+                                            width: 344,
+                                            height: 183,
+                                            child: Center(
+                                              child:
+                                                  CircularProgressIndicator(),
+                                            ));
+                                      }),
                                   const SizedBox(height: 5),
                                   Row(
                                     children: [
