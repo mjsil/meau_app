@@ -44,6 +44,7 @@ class AnimalDetailScreen extends StatefulWidget {
 
   //owner
   final String owner;
+  final String id;
 
   const AnimalDetailScreen({
     Key? key,
@@ -71,6 +72,7 @@ class AnimalDetailScreen extends StatefulWidget {
     required this.previousVisit,
     //owner
     required this.owner,
+    required this.id,
   }) : super(key: key);
 
   @override
@@ -84,6 +86,9 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
   String? token = " ";
   String? address = " ";
   String? city = " ";
+  String? interestedToken;
+  String? interestedName;
+  String? interestedAge;
 
   @override
   void initState() {
@@ -96,6 +101,8 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
     listenFCM();
 
     getPeopleInfo();
+
+    getInterestedInfo();
 
     // getToken();
 
@@ -113,6 +120,20 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
       token = snap['token'];
       address = snap['address'];
       city = snap['city'];
+    });
+  }
+
+  void getInterestedInfo() async {
+    //final User? user = FirebaseAuth.instance.currentUser;
+    DocumentSnapshot snap = await FirebaseFirestore.instance
+        .collection("people")
+        .doc(user?.uid)
+        .get();
+
+    setState(() {
+      interestedToken = snap['token'];
+      interestedName = snap['name'];
+      interestedAge = snap['age'];
     });
   }
 
@@ -257,6 +278,9 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
   }
 
   void sendPeoplePushMessage() async {}
+
+  FirebaseFirestore db = FirebaseFirestore.instance;
+  final User? user = FirebaseAuth.instance.currentUser;
 
   @override
   Widget build(BuildContext context) {
@@ -667,6 +691,23 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
                       color: Colors.transparent,
                       child: InkWell(
                         onTap: () async {
+                          try {
+                            await db.collection('interested').doc().set({
+                              'interestedId': user?.uid,
+                              'interestedToken': interestedToken,
+                              'interestedName': interestedName,
+                              'interestedAge': interestedAge,
+                              'animalId': widget.id,
+                            });
+
+                            // ignore: use_build_context_synchronously
+                            //Navigator.of(context).pushNamed("/home");
+                          } catch (error) {
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(
+                              content: Text('Animal não cadastrado!'),
+                            ));
+                          }
                           sendPushMessage(token!);
                         },
                         child: const SizedBox(
