@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:http/http.dart';
 
 class InterestedMyAnimalScreen extends StatefulWidget {
   final String id;
@@ -102,24 +103,34 @@ class _InterestedMyAnimalScreenState extends State<InterestedMyAnimalScreen> {
                                                   color: Colors.transparent,
                                                   child: InkWell(
                                                     onTap: () {
-                                                      // print(
-                                                      //   FirebaseFirestore
-                                                      //       .instance
-                                                      //       .collection(
-                                                      //           "animal")
-                                                      //       .doc(snap[index]
-                                                      //           ['animalId'])
-                                                      //       .update({
-                                                      //         "owner":
-                                                      //             "teste do owner"
-                                                      //       })
-                                                      //       .then((_) => print(
-                                                      //           'Success'))
-                                                      //       .catchError(
-                                                      //         (error) => print(
-                                                      //             'Failed: $error'),
-                                                      //       ),
-                                                      // );
+                                                      FirebaseFirestore.instance
+                                                          .collection("animal")
+                                                          .doc(snap[index]
+                                                                  ['animalId']
+                                                              .replaceAll(
+                                                                  ' ', ''))
+                                                          .update({
+                                                            "owner": snap[index]
+                                                                ['interestedId']
+                                                          })
+                                                          .then((_) =>
+                                                              print('Success'))
+                                                          .catchError(
+                                                            (error) => print(
+                                                                'Failed: $error'),
+                                                          );
+                                                      // FirebaseFirestore.instance
+                                                      //     .collection(
+                                                      //         "interested")
+                                                      //     .where("animalId",
+                                                      //         isEqualTo: snap[
+                                                      //                     index]
+                                                      //                 [
+                                                      //                 'animalId']
+                                                      //             .replaceAll(
+                                                      //                 ' ', ''))
+                                                      //     .get()
+                                                      //     .
                                                     },
                                                     child: const SizedBox(
                                                       width: double.infinity,
