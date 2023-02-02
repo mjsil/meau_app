@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:meau_app/screens/Chat/index.dart';
 import 'package:provider/provider.dart';
 
 import '../../services/auth/index.dart';
@@ -119,7 +120,8 @@ class IntroductionScreen extends StatelessWidget {
                   onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const MyAnimalsScreen()),
+                      //builder: (context) => const MyAnimalsScreen()),
+                      builder: (context) => const ChatScreen()),
                   ),
                   child: const SizedBox(
                     width: 232.0,
