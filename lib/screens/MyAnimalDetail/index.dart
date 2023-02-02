@@ -34,6 +34,7 @@ class MyAnimalDetailScreen extends StatelessWidget {
   //
   final String sickness;
   final String history;
+  final String id;
 
   const MyAnimalDetailScreen({
     Key? key,
@@ -59,6 +60,8 @@ class MyAnimalDetailScreen extends StatelessWidget {
     required this.adoptionTerm,
     required this.housePicture,
     required this.previousVisit,
+    //animal id
+    required this.id,
   }) : super(key: key);
 
   @override
@@ -474,7 +477,7 @@ class MyAnimalDetailScreen extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
-                                    const InterestedMyAnimalScreen()),
+                                    InterestedMyAnimalScreen(id: id)),
                           ),
                           child: const SizedBox(
                             width: 232.0,

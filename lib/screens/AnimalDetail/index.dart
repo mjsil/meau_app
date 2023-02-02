@@ -44,6 +44,7 @@ class AnimalDetailScreen extends StatefulWidget {
 
   //owner
   final String owner;
+  final String id;
 
   const AnimalDetailScreen({
     Key? key,
@@ -71,6 +72,7 @@ class AnimalDetailScreen extends StatefulWidget {
     required this.previousVisit,
     //owner
     required this.owner,
+    required this.id,
   }) : super(key: key);
 
   @override
@@ -81,7 +83,12 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
   late AndroidNotificationChannel channel;
   late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
-  //String? token = " ";
+  String? token = " ";
+  String? address = " ";
+  String? city = " ";
+  String? interestedToken;
+  String? interestedName;
+  String? interestedAge;
 
   @override
   void initState() {
@@ -93,9 +100,41 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
 
     listenFCM();
 
+    getPeopleInfo();
+
+    getInterestedInfo();
+
     // getToken();
 
     //FirebaseMessaging.instance.subscribeToTopic("Animal");
+  }
+
+  void getPeopleInfo() async {
+    //final User? user = FirebaseAuth.instance.currentUser;
+    DocumentSnapshot snap = await FirebaseFirestore.instance
+        .collection("people")
+        .doc(widget.owner)
+        .get();
+
+    setState(() {
+      token = snap['token'];
+      address = snap['address'];
+      city = snap['city'];
+    });
+  }
+
+  void getInterestedInfo() async {
+    //final User? user = FirebaseAuth.instance.currentUser;
+    DocumentSnapshot snap = await FirebaseFirestore.instance
+        .collection("people")
+        .doc(user?.uid)
+        .get();
+
+    setState(() {
+      interestedToken = snap['token'];
+      interestedName = snap['name'];
+      interestedAge = snap['age'];
+    });
   }
 
   // void getToken() async {
@@ -181,9 +220,7 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
             android: AndroidNotificationDetails(
               channel.id,
               channel.name,
-              // TODO add a proper drawable resource to android, for now using
-              //      one that already exists in example app.
-              icon: 'launch_background',
+              icon: '@mipmap/launcher_icon',
             ),
           ),
         );
@@ -239,6 +276,11 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
       'tokens': FieldValue.arrayUnion([deviceToken]),
     });
   }
+
+  void sendPeoplePushMessage() async {}
+
+  FirebaseFirestore db = FirebaseFirestore.instance;
+  final User? user = FirebaseAuth.instance.currentUser;
 
   @override
   Widget build(BuildContext context) {
@@ -427,8 +469,8 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
                   children: [
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
-                        Text(
+                      children: [
+                        const Text(
                           "LOCALIZAÇÃO",
                           style: TextStyle(
                             fontSize: 12,
@@ -437,10 +479,10 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
                             color: Color.fromARGB(255, 247, 168, 0),
                           ),
                         ),
-                        SizedBox(height: 8),
+                        const SizedBox(height: 8),
                         Text(
-                          "Samambaia Sul – Distrito Federal",
-                          style: TextStyle(
+                          "${address!.toUpperCase()} - ${city!.toUpperCase()}",
+                          style: const TextStyle(
                             fontSize: 14,
                             fontFamily: 'Roboto',
                             fontWeight: FontWeight.w400,
@@ -649,17 +691,24 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
                       color: Colors.transparent,
                       child: InkWell(
                         onTap: () async {
-                          final User? user = FirebaseAuth.instance.currentUser;
-                          DocumentSnapshot snap = await FirebaseFirestore
-                              .instance
-                              .collection("people")
-                              .doc(widget.owner)
-                              .get();
+                          try {
+                            await db.collection('interested').doc().set({
+                              'interestedId': user?.uid,
+                              'interestedToken': interestedToken,
+                              'interestedName': interestedName,
+                              'interestedAge': interestedAge,
+                              'animalId': widget.id,
+                            });
 
-                          String token = snap['token'];
-                          print(token);
-
-                          sendPushMessage(token);
+                            // ignore: use_build_context_synchronously
+                            //Navigator.of(context).pushNamed("/home");
+                          } catch (error) {
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(
+                              content: Text('Animal não cadastrado!'),
+                            ));
+                          }
+                          sendPushMessage(token!);
                         },
                         child: const SizedBox(
                           width: 232.0,
