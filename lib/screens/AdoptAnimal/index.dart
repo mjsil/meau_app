@@ -16,7 +16,7 @@ class _AdoptAnimalState extends State<AdoptAnimal> {
   @override
   Widget build(BuildContext context) {
     final Storage storage = Storage();
-    
+
     const Color background = Color.fromARGB(255, 254, 226, 155);
     const Color fill = Colors.white;
     final List<Color> gradient = [
@@ -123,41 +123,80 @@ class _AdoptAnimalState extends State<AdoptAnimal> {
                                   ),
                                   const SizedBox(height: 5),
                                   FutureBuilder(
-                                    future: storage.downloadURL(snap[index]['photo']),
-                                    builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-                                      if(snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
-                                        return Container(
-                                          width: 344,
-                                          height: 183,
-                                          decoration: BoxDecoration(
-                                            image: DecorationImage(
-                                              image: NetworkImage(snapshot.data!),
-                                              fit: BoxFit.cover
-                                            )
-                                          ),
-                                          child: Material(
-                                            color: Colors.transparent,
-                                            child: InkWell(
-                                              onTap: () => Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                    const AnimalDetailScreen()),
+                                      future: storage
+                                          .downloadURL(snap[index]['photo']),
+                                      builder: (BuildContext context,
+                                          AsyncSnapshot<String> snapshot) {
+                                        if (snapshot.connectionState ==
+                                                ConnectionState.done &&
+                                            snapshot.hasData) {
+                                          return Container(
+                                            width: 344,
+                                            height: 183,
+                                            decoration: BoxDecoration(
+                                                image: DecorationImage(
+                                                    image: NetworkImage(
+                                                        snapshot.data!),
+                                                    fit: BoxFit.cover)),
+                                            child: Material(
+                                              color: Colors.transparent,
+                                              child: InkWell(
+                                                onTap: () => Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        AnimalDetailScreen(
+                                                      name: snap[index]['name'],
+                                                      pictureUrl:
+                                                          snapshot.data!,
+                                                      sex: snap[index]['sex'],
+                                                      size: snap[index]['size'],
+                                                      age: snap[index]['age'],
+                                                      castrated: snap[index]
+                                                          ['castrated'],
+                                                      dewormed: snap[index]
+                                                          ['dewormed'],
+                                                      vaccinated: snap[index]
+                                                          ['vaccinated'],
+                                                      sick: snap[index]['sick'],
+                                                      sickness: snap[index]
+                                                          ['sickness'],
+                                                      history: snap[index]
+                                                          ['history'],
+                                                      playful: snap[index]
+                                                          ['playful'],
+                                                      shy: snap[index]['shy'],
+                                                      calm: snap[index]['calm'],
+                                                      watchDog: snap[index]
+                                                          ['watchDog'],
+                                                      lovable: snap[index]
+                                                          ['lovable'],
+                                                      lazy: snap[index]['lazy'],
+                                                      adoptionTerm: snap[index]
+                                                          ['adoptionTerm'],
+                                                      housePicture: snap[index]
+                                                          ['housePicture'],
+                                                      previousVisit: snap[index]
+                                                          ['previousVisit'],
+                                                      id: snap[index]["id"],
+                                                      owner: snap[index]
+                                                          ["owner"],
+                                                    ),
+                                                  ),
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                        );
-                                      }
-                                      
-                                      return const SizedBox(
-                                        width: 344,
-                                        height: 183,
-                                        child: Center(
-                                          child: CircularProgressIndicator(),
-                                        ) 
-                                      );
-                                    }
-                                  ),
+                                          );
+                                        }
+
+                                        return const SizedBox(
+                                            width: 344,
+                                            height: 183,
+                                            child: Center(
+                                              child:
+                                                  CircularProgressIndicator(),
+                                            ));
+                                      }),
                                   const SizedBox(height: 5),
                                   Row(
                                     children: [
