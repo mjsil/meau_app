@@ -40,17 +40,6 @@ class _AdoptAnimalState extends State<AdoptAnimal> {
             fontWeight: FontWeight.w500,
           ),
         ),
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(
-              Icons.search,
-              color: Color.fromARGB(255, 67, 67, 67),
-            ),
-            onPressed: () {
-              // do something
-            },
-          )
-        ],
         systemOverlayStyle: const SystemUiOverlayStyle(
             statusBarColor: Color.fromARGB(255, 247, 168, 0)),
         iconTheme: const IconThemeData(color: Color.fromARGB(255, 67, 67, 67)),
@@ -116,9 +105,6 @@ class _AdoptAnimalState extends State<AdoptAnimal> {
                                           fontWeight: FontWeight.w500,
                                         ),
                                       ),
-                                      const Spacer(),
-                                      const Icon(Icons.favorite_border),
-                                      const SizedBox(width: 10),
                                     ],
                                   ),
                                   const SizedBox(height: 5),

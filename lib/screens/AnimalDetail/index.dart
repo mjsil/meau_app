@@ -314,17 +314,6 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
             fontWeight: FontWeight.w500,
           ),
         ),
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(
-              Icons.search,
-              color: Color.fromARGB(255, 67, 67, 67),
-            ),
-            onPressed: () {
-              // do something
-            },
-          )
-        ],
         systemOverlayStyle: const SystemUiOverlayStyle(
             statusBarColor: Color.fromARGB(255, 247, 168, 0)),
         iconTheme: const IconThemeData(color: Color.fromARGB(255, 67, 67, 67)),
@@ -333,39 +322,22 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
       ),
       body: ListView(
         children: [
-          Stack(
-            clipBehavior: Clip.none,
+          Column(
             children: [
-              Column(
-                children: [
-                  Container(
-                    height: 184,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: NetworkImage(widget.pictureUrl),
-                          fit: BoxFit.cover),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
-                          spreadRadius: -1,
-                          blurRadius: 1,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
+              Container(
+                height: 184,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                      image: NetworkImage(widget.pictureUrl),
+                      fit: BoxFit.cover),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      spreadRadius: -1,
+                      blurRadius: 1,
+                      offset: const Offset(0, 4),
                     ),
-                  ),
-                ],
-              ),
-              Positioned(
-                right: 20,
-                top: 157,
-                child: FloatingActionButton(
-                  backgroundColor: const Color.fromARGB(255, 250, 250, 250),
-                  onPressed: () {},
-                  child: const Icon(
-                    Icons.favorite_border,
-                    color: Color.fromARGB(255, 67, 67, 67),
-                  ),
+                  ],
                 ),
               ),
             ],

@@ -42,17 +42,6 @@ class _MyAnimalsScreenState extends State<MyAnimalsScreen> {
             fontWeight: FontWeight.w500,
           ),
         ),
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(
-              Icons.search,
-              color: Color.fromARGB(255, 67, 67, 67),
-            ),
-            onPressed: () {
-              // do something
-            },
-          )
-        ],
         systemOverlayStyle: const SystemUiOverlayStyle(
             statusBarColor: Color.fromARGB(255, 88, 155, 155)),
         iconTheme: const IconThemeData(color: Color.fromARGB(255, 67, 67, 67)),
