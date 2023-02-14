@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:http/http.dart';
+import 'package:meau_app/screens/Chat/index.dart';
+import 'package:meau_app/services/message/index.dart';
 
 class InterestedMyAnimalScreen extends StatefulWidget {
   final String id;
@@ -18,6 +20,9 @@ class InterestedMyAnimalScreen extends StatefulWidget {
 class _InterestedMyAnimalScreenState extends State<InterestedMyAnimalScreen> {
   @override
   Widget build(BuildContext context) {
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    final User? user = auth.currentUser;
+
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 250, 250, 250),
       appBar: AppBar(
@@ -216,6 +221,67 @@ class _InterestedMyAnimalScreenState extends State<InterestedMyAnimalScreen> {
                               ),
                             ),
                             const SizedBox(height: 12),
+                            Center(
+                              child: Container(
+                                width: 232.0,
+                                height: 40.0,
+                                decoration: BoxDecoration(
+                                  color: const Color.fromARGB(255, 136, 201, 191),
+                                  borderRadius: BorderRadius.circular(2),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.3),
+                                      spreadRadius: 1,
+                                      blurRadius: 1,
+                                      offset: const Offset(2, 2),
+                                    ),
+                                  ],
+                                ),
+                                child: Material(
+                                  color: Colors.transparent,
+                                  child: InkWell(
+                                    onTap: () {
+                                      DatabaseService().getGroupUsers('${user?.uid}', snap[index]['interestedId'])
+                                        .then((idGroup) => {
+                                          if(idGroup != null) {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) => ChatScreen(idGroup: '$idGroup', userName: snap[index]['interestedName'],),
+                                              ),
+                                            )
+                                          } else {
+                                            DatabaseService().createGroup('${user?.uid}', snap[index]['interestedId'], snap[index]['interestedName'])
+                                              .then((idGroup) => {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) => ChatScreen(idGroup: '$idGroup', userName: snap[index]['interestedName'],),
+                                                  ),
+                                                ),
+                                              })
+                                          }
+                                        });
+                                    },
+                                    child: const SizedBox(
+                                      width: 232.0,
+                                      height: 40.0,
+                                      child: Center(
+                                        child: Text(
+                                          "IR PARA O CHAT",
+                                          style: TextStyle(
+                                            fontSize: 12.0,
+                                            fontFamily: 'Roboto',
+                                            fontWeight: FontWeight.w500,
+                                            color: Color.fromARGB(255, 67, 67, 67),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
                           ],
                         ),
                       );
@@ -225,47 +291,6 @@ class _InterestedMyAnimalScreenState extends State<InterestedMyAnimalScreen> {
                   return const SizedBox();
                 }
               },
-            ),
-            Center(
-              child: Container(
-                width: 232.0,
-                height: 40.0,
-                decoration: BoxDecoration(
-                  color: const Color.fromARGB(255, 136, 201, 191),
-                  borderRadius: BorderRadius.circular(2),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.3),
-                      spreadRadius: 1,
-                      blurRadius: 1,
-                      offset: const Offset(2, 2),
-                    ),
-                  ],
-                ),
-                child: Material(
-                  color: Colors.transparent,
-                  child: InkWell(
-                    onTap: () {
-                      print("tapped");
-                    },
-                    child: const SizedBox(
-                      width: 232.0,
-                      height: 40.0,
-                      child: Center(
-                        child: Text(
-                          "IR PARA O CHAT",
-                          style: TextStyle(
-                            fontSize: 12.0,
-                            fontFamily: 'Roboto',
-                            fontWeight: FontWeight.w500,
-                            color: Color.fromARGB(255, 67, 67, 67),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
             ),
           ],
         ),

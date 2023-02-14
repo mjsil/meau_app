@@ -119,7 +119,7 @@ class IntroductionScreen extends StatelessWidget {
                   onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const MyAnimalsScreen()),
+                      builder: (context) => const MyAnimalsScreen()),
                   ),
                   child: const SizedBox(
                     width: 232.0,
