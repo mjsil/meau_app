@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:meau_app/services/auth/index.dart';
 import 'package:provider/provider.dart';
 
 import '../SideBarMenu/index.dart';
+import '../SignUp/index.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -166,64 +166,13 @@ class LoginScreen extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 72),
-            Container(
-              alignment: Alignment.center,
-              width: 232.0,
-              height: 40.0,
-              decoration: BoxDecoration(
-                color: const Color.fromARGB(255, 25, 79, 124),
-                borderRadius: BorderRadius.circular(2),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.3),
-                    spreadRadius: 1,
-                    blurRadius: 1,
-                    offset: const Offset(2, 2),
-                  ),
-                ],
-              ),
-              child: Material(
-                color: Colors.transparent,
-                child: InkWell(
-                  onTap: () {
-                    print("tapped");
-                  },
-                  child: SizedBox(
-                    width: 232.0,
-                    height: 40.0,
-                    child: Center(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: const [
-                          Icon(Icons.facebook,
-                              size: 22,
-                              color: Color.fromARGB(255, 247, 247, 247)),
-                          SizedBox(width: 15),
-                          Text(
-                            "ENTRAR COM FACEBOOK",
-                            style: TextStyle(
-                              fontSize: 12.0,
-                              fontFamily: 'Roboto',
-                              fontWeight: FontWeight.w400,
-                              color: Color.fromARGB(255, 247, 247, 247),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
             const SizedBox(height: 8),
             Container(
               alignment: Alignment.center,
               width: 232.0,
               height: 40.0,
               decoration: BoxDecoration(
-                color: const Color.fromARGB(255, 241, 95, 92),
+                color: const Color.fromARGB(255, 207, 233, 233),
                 borderRadius: BorderRadius.circular(2),
                 boxShadow: [
                   BoxShadow(
@@ -237,31 +186,23 @@ class LoginScreen extends StatelessWidget {
               child: Material(
                 color: Colors.transparent,
                 child: InkWell(
-                  onTap: () {
-                    print("tapped");
-                  },
-                  child: SizedBox(
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const SignUpScreen()),
+                  ),
+                  child: const SizedBox(
                     width: 232.0,
                     height: 40.0,
                     child: Center(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: const [
-                          Icon(MdiIcons.googlePlus,
-                              size: 22,
-                              color: Color.fromARGB(255, 247, 247, 247)),
-                          SizedBox(width: 15),
-                          Text(
-                            "ENTRAR COM GOOGLE",
-                            style: TextStyle(
-                              fontSize: 12.0,
-                              fontFamily: 'Roboto',
-                              fontWeight: FontWeight.w400,
-                              color: Color.fromARGB(255, 247, 247, 247),
-                            ),
-                          ),
-                        ],
+                      child: Text(
+                        "CADASTRAR",
+                        style: TextStyle(
+                          fontSize: 12.0,
+                          fontFamily: 'Roboto',
+                          fontWeight: FontWeight.w400,
+                          color: Color.fromARGB(255, 67, 67, 67),
+                        ),
                       ),
                     ),
                   ),
