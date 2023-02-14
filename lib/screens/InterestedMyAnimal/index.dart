@@ -243,24 +243,26 @@ class _InterestedMyAnimalScreenState extends State<InterestedMyAnimalScreen> {
                                     onTap: () {
                                       DatabaseService().getGroupUsers('${user?.uid}', snap[index]['interestedId'])
                                         .then((idGroup) => {
-                                          if(idGroup != null) {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) => ChatScreen(idGroup: '$idGroup', userName: snap[index]['interestedName'],),
-                                              ),
-                                            )
-                                          } else {
-                                            DatabaseService().createGroup('${user?.uid}', snap[index]['interestedId'], snap[index]['interestedName'])
-                                              .then((idGroup) => {
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) => ChatScreen(idGroup: '$idGroup', userName: snap[index]['interestedName'],),
-                                                  ),
+                                          DatabaseService().getAdminName('${user?.uid}').then((peopleName) => {
+                                            if(idGroup != null) {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) => ChatScreen(idGroup: '$idGroup', userName: snap[index]['interestedName'],),
                                                 ),
-                                              })
-                                          }
+                                              )
+                                            } else {
+                                              DatabaseService().createGroup('${user?.uid}', snap[index]['interestedId'], snap[index]['interestedName'], '$peopleName')
+                                                .then((idGroup) => {
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) => ChatScreen(idGroup: '$idGroup', userName: snap[index]['interestedName'],),
+                                                    ),
+                                                  ),
+                                                })
+                                            }
+                                          }),
                                         });
                                     },
                                     child: const SizedBox(

@@ -5,16 +5,19 @@ class DatabaseService {
   final String? uid;
   DatabaseService({this.uid});
 
+  final CollectionReference peopleCollection =
+    FirebaseFirestore.instance.collection("people");
   final CollectionReference groupCollection =
     FirebaseFirestore.instance.collection("groups");
 
-  Future createGroup(String admin, String participant,  String participantName) async {
+  Future createGroup(String admin, String participant, String participantName, String adminName) async {
     DocumentReference groupDocumentReference = await groupCollection.add({
       "admin": admin,
       "participant": participant,
       "lastMessage": "",
       "time": "",
       "participantName": participantName,
+      "adminName": adminName,
     });
 
     await groupDocumentReference.update({
@@ -47,7 +50,7 @@ class DatabaseService {
       .where("participant", isEqualTo: participant)
       .get();
 
-     if (groupDocumentReference.docs.isNotEmpty) {
+    if (groupDocumentReference.docs.isNotEmpty) {
       return groupDocumentReference.docs[0].id;
     } else {
       return null;
@@ -69,5 +72,20 @@ class DatabaseService {
     ]);
 
     return combinedStream;
+  }
+
+  Future<String?> getAdminName(String uid) async {
+    final peopleDocumentReference = peopleCollection.doc(uid);
+    DocumentSnapshot snapshot = await peopleDocumentReference.get();
+    
+    if (snapshot.exists && snapshot.data() != null) {
+      final dynamic data = snapshot.data();
+      
+      if (data is Map<String, dynamic> && data.containsKey('name') && data['name'] is String) {
+        return data['name'];
+      }
+    }
+    
+    return null;
   }
 }

@@ -73,7 +73,9 @@ class _HomePageState extends State<HomeChatScreen> {
             itemBuilder: (context, index) {
               return GroupComponent(
                 groupId: snapshot.data[index]['groupId'],
-                userName: snapshot.data[index]['participantName'],
+                userName: user!.uid == snapshot.data[index]['admin'] 
+                  ? snapshot.data[index]['participantName'] 
+                  : snapshot.data[index]['adminName'],
                 lastMessage: snapshot.data[index]['lastMessage'],);
             })
           : Container();
