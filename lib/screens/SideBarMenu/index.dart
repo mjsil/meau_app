@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:meau_app/screens/HomeChat/index.dart';
 
 import '../AnimalRegistry/index.dart';
 import '../PreLogin/index.dart';
@@ -34,6 +35,25 @@ class _NavBarState extends State<NavBar> {
             ),
             onDetailsPressed: () => {},
           ),
+          ListTile(
+            title: const Text('Chat'),
+            onTap: () {
+              final User? user = authInstance.currentUser;
+              if (user == null) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const PreLoginScreen()),
+                );
+              } else {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const HomeChatScreen()),
+                );
+              }
+            },
+          ),
           ExpansionTile(
             leading: const Icon(Icons.pets),
             title: const Text('Atalhos'),
@@ -45,6 +65,7 @@ class _NavBarState extends State<NavBar> {
                   ? Icons.arrow_drop_down
                   : Icons.arrow_drop_down,
             ),
+            
             children: <Widget>[
               const Divider(
                 endIndent: 100,
