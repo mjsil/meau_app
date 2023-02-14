@@ -101,85 +101,8 @@ class AnimalRegistry extends State<AnimalRegistryScreen> {
       body: ListView(
         padding: const EdgeInsetsDirectional.only(start: 24, end: 24),
         children: [
-          const SizedBox(height: 15),
-          Row(
-            children: const [
-              Text(
-                "Tenho interesse em cadastrar o animal para:",
-                style: TextStyle(
-                  fontSize: 14,
-                  fontFamily: 'Roboto',
-                  fontWeight: FontWeight.w400,
-                  color: Color.fromARGB(255, 67, 67, 67),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 15),
-          //BOTÃO ADOÇÃO
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Wrap(
-                spacing: 8,
-                children: [
-                  //ADOÇÃO
-                  Container(
-                    alignment: Alignment.center,
-                    width: 100,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color: const Color.fromARGB(255, 255, 211, 88),
-                      borderRadius: BorderRadius.circular(2),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
-                          spreadRadius: -1,
-                          blurRadius: 1,
-                          offset: const Offset(0, 3),
-                        ),
-                      ],
-                    ),
-                    child: Material(
-                      color: Colors.transparent,
-                      child: InkWell(
-                        onTap: () {
-                          print("tapped");
-                        },
-                        child: const SizedBox(
-                          width: 100,
-                          height: 40,
-                          child: Center(
-                            child: Text(
-                              "ADOÇÃO",
-                              style: TextStyle(
-                                fontSize: 12.0,
-                                fontFamily: 'Roboto',
-                                fontWeight: FontWeight.w400,
-                                color: Color.fromARGB(255, 67, 67, 67),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
           const SizedBox(height: 20),
           const Divider(height: 1, thickness: 0.3),
-          const SizedBox(height: 16),
-          const Text(
-            "Adoção",
-            style: TextStyle(
-              fontSize: 16,
-              fontFamily: 'Roboto',
-              fontWeight: FontWeight.w500,
-              color: Color.fromARGB(255, 67, 67, 67),
-            ),
-          ),
           //NOME DO ANIMAL
           const SizedBox(height: 20),
           const Text(
@@ -1289,7 +1212,7 @@ class AnimalRegistry extends State<AnimalRegistryScreen> {
                         } else if (imageName == '') {
                           ScaffoldMessenger.of(context)
                               .showSnackBar(const SnackBar(
-                            content: Text('Envie uma imagem.'),
+                            content: Text('Envie uma foto.'),
                           ));
                         } else if (_speciesIsSelected == false) {
                           ScaffoldMessenger.of(context)
