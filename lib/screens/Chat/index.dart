@@ -6,7 +6,10 @@ import 'package:meau_app/services/message/index.dart';
 import 'package:meau_app/widgets/Message/index.dart';
 
 class ChatScreen extends StatefulWidget {
-  const ChatScreen({Key? key}) : super(key: key);
+  const ChatScreen({Key? key, required this.idGroup, required this.userName}) : super(key: key);
+  
+  final String idGroup;
+  final String userName;
 
   @override
   State<ChatScreen> createState() => _ChatPageState();
@@ -23,7 +26,7 @@ class _ChatPageState extends State<ChatScreen> {
   }
 
   getChatandAdmin() {
-    DatabaseService().getChats('zH3rBdIPnNEDFoqO0H1v').then((val) {
+    DatabaseService().getChats(widget.idGroup).then((val) {
       setState(() {
         chats = val;
       });
@@ -38,22 +41,22 @@ class _ChatPageState extends State<ChatScreen> {
     return Scaffold(
       backgroundColor: const Color.fromRGBO(241, 242, 242, 1),
       appBar: AppBar(
-        title: const Text('Chat',
-          style: TextStyle(
+        title: Text(widget.userName,
+          style: const TextStyle(
             color: Color.fromARGB(255, 67, 67, 67),
             fontFamily: 'Roboto',
             fontWeight: FontWeight.w500,
           ),
         ),
         systemOverlayStyle: const SystemUiOverlayStyle(
-          statusBarColor: Color.fromARGB(255, 88, 155, 155)),
+          statusBarColor: Color.fromARGB(255, 88, 155, 155),
+        ),
         iconTheme: const IconThemeData(color: Color.fromARGB(255, 67, 67, 67)),
         backgroundColor: const Color.fromARGB(255, 136, 201, 191),
         elevation: 0,
       ),
       body: Stack(
         children: <Widget>[
-          // chat messages
           chatMessages('${user?.uid}'),
           
           Container(
@@ -61,6 +64,7 @@ class _ChatPageState extends State<ChatScreen> {
             width: MediaQuery.of(context).size.width,
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              color: Colors.white,
               width: MediaQuery.of(context).size.width,
               child: Row(children: [
                 Expanded(
@@ -111,6 +115,7 @@ class _ChatPageState extends State<ChatScreen> {
       builder: (context, AsyncSnapshot snapshot) {
         return snapshot.hasData
             ? ListView.builder(
+                padding: const EdgeInsets.only(top: 16, bottom: 128),
                 itemCount: snapshot.data.docs.length,
                 itemBuilder: (context, index) {
                   return Message(
@@ -131,8 +136,8 @@ class _ChatPageState extends State<ChatScreen> {
         "sender": uid,
         "time": DateTime.now().millisecondsSinceEpoch,
       };
-
-      DatabaseService().sendMessage('zH3rBdIPnNEDFoqO0H1v', chatMessageMap);
+      
+      DatabaseService().sendMessage(widget.idGroup, chatMessageMap);
 
       setState(() {
         messageController.clear();
